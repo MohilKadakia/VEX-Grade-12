@@ -13,14 +13,59 @@ void on_center_button() {
 		pros::lcd::set_text(2, "I was pressed!");
 		pros::delay(1);
 		pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-		const std::int32_t voltage = 100;
-		motor1.move(voltage);		
-		pros::delay(20000);
-		pros::lcd::set_text(2, "Motor ran");
+		motor1.move(100);
+		pros::delay(20000);	
 	} else {
 		pros::lcd::clear_line(2);
 	}
 }
+
+void on_left_button() {
+	static bool pressed = false;
+	pressed = !pressed;
+	if (pressed) {
+		pros::lcd::set_text(2, "left button was pressed!");
+		pros::delay(1);
+		pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+		motor1.move(0);		
+	} else {
+		pros::lcd::clear_line(2);
+	}
+}
+
+void on_center_button() {
+	static bool pressed = false;
+	pressed = !pressed;
+	if (pressed) {
+		pros::lcd::set_text(2, "I was pressed!");
+		pros::delay(1);
+		pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+		motor1.move(100);
+		pros::delay(20000);	
+	} else {
+		pros::lcd::clear_line(2);
+	}
+}
+
+void on_right_button() {
+	static bool pressed = false;
+	pressed = !pressed;
+	if (pressed) {
+		pros::lcd::set_text(2, "right button was pressed!");
+		pros::delay(1);
+		pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+		pros::Motor motor2(2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+
+		pros::Motor_Group motor_group ({motor1, motor2});
+
+		motor_group.move(100);
+		pros::delay(20000);
+		
+	} else {
+		pros::lcd::clear_line(2);
+	}
+}
+
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -30,16 +75,17 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
 
+	pros::lcd::register_btn0_cb(on_left_button);
 	pros::lcd::register_btn1_cb(on_center_button);
-	
-}
+	pros::lcd::register_btn2_cb(on_right_button);	
+	pros::lcd::set_text(1, "Attempting motor stuff");
 
-void opcontrol() {
 	pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 	motor1.move(100);
 	pros::delay(20000);	
+	
+	pros::lcd::set_text(1, "Moved!");
 }
 
 /**
