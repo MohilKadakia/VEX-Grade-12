@@ -13,7 +13,8 @@ void on_center_button() {
 		pros::lcd::set_text(2, "I was pressed!");
 		pros::delay(1);
 		pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-		motor1.move(100);		
+		const std::int32_t voltage = 100;
+		motor1.move(voltage);		
 		pros::delay(20000);
 		pros::lcd::set_text(2, "Motor ran");
 	} else {
