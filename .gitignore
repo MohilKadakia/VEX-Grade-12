@@ -17,6 +17,7 @@ temp.errors
 .d/
 /include
 /firmware
+
+common.mk
 Makefile
 project.pros
-common.mk
