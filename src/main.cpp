@@ -1,37 +1,27 @@
 #include "main.h"
+#include <string>
 
-/**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-		pros::delay(1);
-		pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-		motor1.move(100);
-		pros::delay(20000);	
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
+// Left Side Motors
+pros::Motor motor_1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor motor_2(2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor_Group left_motors({motor_1, motor_2});
 
-void on_left_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "left button was pressed!");
-		pros::delay(1);
-		pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-		motor1.move(0);		
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
+
+// // Right Side Motors
+// pros::Motor motor_3(3, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor motor_4(4, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor_Group right_motors({motor_3, motor_4});
+
+// // Drive Train Motors
+// pros::Motor_Group drive_train({motor_1, motor_2, motor_3, motor_4});
+
+// // intake motors
+// pros::Motor motor_5(5, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor motor_6(6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+
+// // catapult motors
+// pros::Motor motor_7(7, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+
 
 void on_center_button() {
 	static bool pressed = false;
@@ -46,26 +36,6 @@ void on_center_button() {
 		pros::lcd::clear_line(2);
 	}
 }
-
-void on_right_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "right button was pressed!");
-		pros::delay(1);
-		pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-		pros::Motor motor2(2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-
-		pros::Motor_Group motor_group ({motor1, motor2});
-
-		motor_group.move(100);
-		pros::delay(20000);
-		
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
-
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -75,17 +45,8 @@ void on_right_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-
-	pros::lcd::register_btn0_cb(on_left_button);
+	pros::lcd::set_text(1, "Inititalizing v1");
 	pros::lcd::register_btn1_cb(on_center_button);
-	pros::lcd::register_btn2_cb(on_right_button);	
-	pros::lcd::set_text(1, "Attempting motor stuff");
-
-	pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-	motor1.move(100);
-	pros::delay(20000);	
-	
-	pros::lcd::set_text(1, "Moved!");
 }
 
 /**
@@ -133,20 +94,31 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	// pros::Controller master(pros::E_CONTROLLER_MASTER);
+	// pros::Motor left_mtr(1);
+	// pros::Motor right_mtr(2);
+
+	// while (true) {
+	// 	pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
+	// 	                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
+	// 	                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
+	// 	int left = master.get_analog(ANALOG_LEFT_Y);
+	// 	int right = master.get_analog(ANALOG_RIGHT_Y);
+
+	// 	left_mtr = left;
+	// 	right_mtr = right;
+
+	// 	pros::delay(20);
+	//}
+	pros::lcd::set_text(1, "Enters the OPControl");
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
-
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
+		motor_1.move((master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
+		pros::delay(2);
+		pros::lcd::set_text(1, std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
 
-		left_mtr = left;
-		right_mtr = right;
-
-		pros::delay(20);
-	}
+		motor_2.move((master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
+		pros::delay(2);
+		pros::lcd::set_text(1, std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
+    }	
 }
