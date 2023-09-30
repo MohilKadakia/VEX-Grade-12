@@ -2,26 +2,25 @@
 #include <string>
 
 // Left Side Motors
-pros::Motor motor_1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor motor_2(2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor_Group left_motors({motor_1, motor_2});
-
+pros::Motor left_motor_1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor left_motor_2(2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor_Group left_motors({left_motor_1, left_motor_2});
 
 // // Right Side Motors
-// pros::Motor motor_3(3, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-// pros::Motor motor_4(4, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-// pros::Motor_Group right_motors({motor_3, motor_4});
+// pros::Motor right_motor_1(3, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor right_motor_2(4, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor_Group right_motors({right_motor_1, right_motor_2});
 
 // // Drive Train Motors
-// pros::Motor_Group drive_train({motor_1, motor_2, motor_3, motor_4});
+// pros::Motor_Group drive_train({left_motor_1, left_motor_2, right_motor_1, right_motor_2});
 
 // // intake motors
-// pros::Motor motor_5(5, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-// pros::Motor motor_6(6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor intake_motor_1(5, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor intake_motor_2(6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor_Group intake_motors({intake_motor_1, intake_motor_2});
 
 // // catapult motors
-// pros::Motor motor_7(7, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-
+// pros::Motor catapult_motor(7, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 void on_center_button() {
 	static bool pressed = false;
@@ -94,31 +93,30 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	// pros::Controller master(pros::E_CONTROLLER_MASTER);
-	// pros::Motor left_mtr(1);
-	// pros::Motor right_mtr(2);
-
-	// while (true) {
-	// 	pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-	// 	                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-	// 	                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-	// 	int left = master.get_analog(ANALOG_LEFT_Y);
-	// 	int right = master.get_analog(ANALOG_RIGHT_Y);
-
-	// 	left_mtr = left;
-	// 	right_mtr = right;
-
-	// 	pros::delay(20);
-	//}
 	pros::lcd::set_text(1, "Enters the OPControl");
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	while (true) {
-		motor_1.move((master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
+		left_motor_1.move((master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
 		pros::delay(2);
 		pros::lcd::set_text(1, std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
 
-		motor_2.move((master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
+		left_motor_2.move((master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
 		pros::delay(2);
 		pros::lcd::set_text(1, std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
+
+		// intake_motors.move(127);
+
+		// drive_train.move((master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
+		// pros::delay(2);
+		// pros::lcd::set_text(1, std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
+
+		// right_motors.move((master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)));
+		// left_motors.move((-(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X))));
+		// pros::delay(2);
+		// pros::lcd::set_text(1, std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
+
+		// catapult_motor.move((master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)));
+		// pros::delay(2);
+		// pros::lcd::set_text(1, std::to_string(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)));
     }	
 }
