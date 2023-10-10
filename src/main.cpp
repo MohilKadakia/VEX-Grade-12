@@ -13,11 +13,12 @@ pros::Motor LM2 (2, pros::E_MOTOR_GEAR_GREEN, false);
 pros::Motor RM1 (3, pros::E_MOTOR_GEAR_GREEN, true);
 pros::Motor RM2 (4, pros::E_MOTOR_GEAR_GREEN, true);
 double previousError = 0;
+double intergal = 0;
 pros::Motor_Group LMG({LM1, LM2});
 pros::Motor_Group RMG({RM1, RM2});
 void initialize() {
-	//pros::lcd::initialize();
-	arms::init();
+	pros::lcd::initialize();
+	// arms::init();
 	arms::pid::init(0,0,0,0,0,0,0,0,0);
 }
 
@@ -45,17 +46,16 @@ double pid(double error, double* pe, double* in, double kp, double ki,
 	return speed;
 }
 
+
 void opcontrol() {
 	while (true) {
-		double targetRPM = 100;
-		double currentRPM = LM1.get_actual_velocity();
-		// double error = targetRPM-currentRPM;
-		// double output = pid(error, &previousError, 0, 1, 0, 0);
-		// pros::lcd::set_text(0, std::to_string(output));
-		// LM1.move_velocity(output);
-		// previousError = error;
+		double targetD = 2080;
+		double currentD = LM1.get_position();
+		double error = targetD-currentD;
+		double output = pid(error, &previousError, &intergal, 0.25, 0.002, 0.1);
+		pros::lcd::set_text(0, std::to_string(output) + " " + std::to_string(currentD));
+		LM1.move_velocity(output);
 		// pros::lcd::set_text(0, std::to_string(conRX) + " " + std::to_string(conLY) + " ");// + std::to_string(v) +  std::to_string(v2));
 		pros::delay(10);
-		// previousError = error;
     }	
 }
