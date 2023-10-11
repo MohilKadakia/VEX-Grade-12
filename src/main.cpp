@@ -3,27 +3,30 @@
 #include "ARMS/config.h"
 #include <string>
 
+pros::Controller master(pros::E_CONTROLLER_MASTER);
+
 // Left Side Motors
 pros::Motor left_motor_1(1, pros::E_MOTOR_GEAR_GREEN, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor left_motor_2(2, pros::E_MOTOR_GEAR_GREEN, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor left_motor_3(3, pros::E_MOTOR_GEAR_GREEN, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor_Group left_motor_group({left_motor_1, left_motor_2, left_motor_3});
+// pros::Motor left_motor_2(2, pros::E_MOTOR_GEAR_GREEN, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor left_motor_3(3, pros::E_MOTOR_GEAR_GREEN, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor_Group left_motor_group({left_motor_1, left_motor_2, left_motor_3});
 
 // Right Side Motors
-pros::Motor right_motor_1(4, pros::E_MOTOR_GEAR_GREEN, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor right_motor_2(5, pros::E_MOTOR_GEAR_GREEN, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor right_motor_3(6, pros::E_MOTOR_GEAR_GREEN, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor_Group right_motor_group({right_motor_1, right_motor_2, right_motor_3});
+pros::Motor right_motor_1(2, pros::E_MOTOR_GEAR_GREEN, true, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor right_motor_2(5, pros::E_MOTOR_GEAR_GREEN, true, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor right_motor_3(6, pros::E_MOTOR_GEAR_GREEN, true, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor_Group right_motor_group({right_motor_1, right_motor_2, right_motor_3});
 
 // Drive Train Motors
-pros::Motor_Group drive_train({left_motor_1, left_motor_2, left_motor_3, right_motor_1, right_motor_2, right_motor_3});
+// pros::Motor_Group drive_train({left_motor_1, left_motor_2, left_motor_3, right_motor_1, right_motor_2, right_motor_3});
 
-// // catapult motors
-// pros::Motor catapult_motor(7, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
+// catapult motors
+pros::Motor catapult_motor(3, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 // // intake motors
 // pros::Motor intake_motor_1(8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 
+bool catapult_shooting = false;
 
 void on_center_button() {
 	static bool pressed = false;
@@ -83,6 +86,31 @@ void competition_initialize() {}
  */
 void autonomous() {}
 
+void fire_catapult() {
+    while (true) {
+        if (catapult_shooting) {
+            catapult_motor.move_velocity(100); // Adjust the velocity as needed
+        } else {
+            catapult_motor.move_velocity(0);
+        }
+        pros::delay(10);
+    }
+}
+
+void drive_robot() {
+	while (true) {
+		int power = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+		int turn = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+		int left = power + turn;
+		int right = power + turn;
+		left_motor_1.move(left);
+		right_motor_1.move(right);
+
+		pros::delay(2);
+    }
+}
+
+
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -97,16 +125,18 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::lcd::set_text(1, "Enters the OPControl");
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	while (true) {
-		int power = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-		int turn = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-		int left = power + turn;
-		int right = power + turn;
-		left_motor_group.move(left);
-		right_motor_group.move(right);
+    pros::Task catapult_task(fire_catapult);
+    pros::Task drive_task(drive_robot);
 
-		pros::delay(2);
-    }	
+    while (true) {
+        // Check R2 button to toggle firing
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+            catapult_shooting = !catapult_shooting;
+            while (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+                pros::delay(10);
+            }
+        }
+
+        pros::delay(10);
+    }
 }
