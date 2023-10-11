@@ -49,12 +49,12 @@ double pid(double error, double* pe, double* in, double kp, double ki,
 
 void opcontrol() {
 	while (true) {
-		double targetD = 2080;
-		double currentD = LM1.get_position();
+		double targetD = -10000;
+		double currentD = LMG.get_positions()[1];
 		double error = targetD-currentD;
 		double output = pid(error, &previousError, &intergal, 0.25, 0.002, 0.1);
 		pros::lcd::set_text(0, std::to_string(output) + " " + std::to_string(currentD));
-		LM1.move_velocity(output);
+		LMG.move_velocity(output);
 		// pros::lcd::set_text(0, std::to_string(conRX) + " " + std::to_string(conLY) + " ");// + std::to_string(v) +  std::to_string(v2));
 		pros::delay(10);
     }	
