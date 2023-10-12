@@ -27,19 +27,23 @@ pros::Motor catapult_motor(3, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENC
 // pros::Motor intake_motor_1(8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 bool catapult_shooting = false;
+double previous_error = 0;
+double integral = 0;
 
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-		pros::delay(1);
-		pros::Motor motor1(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-		motor1.move(100);
-		pros::delay(20000);	
-	} else {
-		pros::lcd::clear_line(2);
-	}
+double pid(double error, double* pe, double* in, double kp, double ki, double kd) {
+    double derivative = error - *pe;
+    if ((*pe > 0 && error < 0) || (*pe < 0 && error > 0))
+    *in = 0; // remove integral at zero error
+    double speed = error * kp + *in * ki + derivative * kd;
+
+    // only let integral wind up if near the target
+    if (fabs(error) < 15) {
+    *in += error;
+    }
+
+    *pe = error;
+
+    return speed;
 }
 
 /**
@@ -52,7 +56,6 @@ void initialize() {
 	arms::init();
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Inititalizing v1");
-	pros::lcd::register_btn1_cb(on_center_button);
 }
 
 /**
@@ -87,12 +90,33 @@ void competition_initialize() {}
 void autonomous() {}
 
 void fire_catapult() {
+    double target_distance = 0;
     while (true) {
+        pros::lcd::set_text(3, std::to_string(catapult_motor.get_position()));
+
         if (catapult_shooting) {
-            catapult_motor.move_velocity(100); // Adjust the velocity as needed
-        } else {
-            catapult_motor.move_velocity(0);
+            target_distance += 1000;
+            pros::lcd::set_text(2, "Rewinding Catapult");
+            while (true) {
+                double current_distance = catapult_motor.get_position();
+                
+                if (current_distance > (target_distance - 5)) {
+                    break;
+                }
+                
+                double error = target_distance - current_distance;
+                double output = pid(error, &previous_error, &integral, 0.25, 0.002, 0.1);
+                pros::lcd::set_text(0, std::to_string(output) + " " + std::to_string(current_distance));
+                catapult_motor.move_velocity(output);
+                // pros::lcd::set_text(0, std::to_string(conRX) + " " + std::to_string(conLY) + " ");// + std::to_string(v) +  std::to_string(v2));
+                pros::delay(10);
+
+                if (!catapult_shooting) {
+                    break;
+                }
+            }       
         }
+
         pros::delay(10);
     }
 }
