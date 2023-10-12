@@ -53,9 +53,9 @@ double pidTurn(double angle) {
 	Convert angle to encoder units
 	Runs PID function
 
-	BLUE  (6:1)  : 
-	GREEN (18:1) : 900 Encoder Units / 360 Degrees (900/rev)
-	RED   (36:1) :
+	BLUE  (6:1)  : 300  Encoder Units / 360 Degrees? (300/rev)
+	GREEN (18:1) : 900  Encoder Units / 360 Degrees  (900/rev)
+	RED   (36:1) : 1800 Envoder Units / 360 Degrees? (1800/rev)
 	*/
 	return 0;
 }
