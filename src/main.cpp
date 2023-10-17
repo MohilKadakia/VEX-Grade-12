@@ -42,10 +42,11 @@ void opcontrol() {
 	pros::lcd::set_text(1, "Enters the OPControl");
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	while (true) {
-		left_motors.move((master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
+		int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+		int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+		left_motors.move(std::clamp(moveL, -127, 127));
+		right_motors.move(std::clamp(moveR, -127, 127));
 		pros::lcd::set_text(1, "Left: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
-
-		right_motors.move((master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
 		pros::lcd::set_text(2, "Right: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
 		pros::delay(10);
     }	
