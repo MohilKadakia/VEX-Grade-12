@@ -1,10 +1,12 @@
 #include "main.h"
 #include "math.h"
 #include <string>
+#include <iostream>
+#include <fstream>
 #include "ARMS/api.h"
 #include "ARMS/config.h"
 #include "ARMS/pid.h"
-
+#define endl '\n'
 
 
 pros::Controller controller (pros::E_CONTROLLER_MASTER);
@@ -16,15 +18,18 @@ double previousErrorL = 0;
 double intergalL = 0;
 double previousErrorR = 0;
 double intergalR = 0;
+std::ofstream XValues("xvalues.txt");
+std::ofstream YValues("yvalues.txt");
 pros::Motor_Group LMG({LM1, LM2});
 pros::Motor_Group RMG({RM1, RM2});
 void initialize() {
 	pros::lcd::initialize();
 	// arms::init();
 	arms::pid::init(0,0,0,0,0,0,0,0,0);
+	XValues << "test";
 }
 
-void disabled() {}
+void disabled() {XValues.close();}
 
 void competition_initialize() {}
 
@@ -79,6 +84,7 @@ void opcontrol() {
 		double outputR = pid(errorR, &previousErrorR, &intergalR, 0.25, 0.002, 0.1);
 		pros::lcd::set_text(0, "Left: " + std::to_string(outputL) + " " + std::to_string(LM1.get_position()));
 		pros::lcd::set_text(1, std::to_string(i));
+		std::cout<<outputL<<endl<<outputR<<endl;
 		// pros::lcd::set_text(1, "Right: " + std::to_string(outputR) + " " + std::to_string(currentAngleR));
 		LM1.move_velocity(outputL);
 		//RMG.move_velocity(outputR);
