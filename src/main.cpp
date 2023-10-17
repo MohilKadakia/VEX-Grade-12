@@ -14,14 +14,18 @@ pros::Motor LM1 (1, pros::E_MOTOR_GEAR_GREEN, false);
 pros::Motor LM2 (2, pros::E_MOTOR_GEAR_GREEN, false);
 pros::Motor RM1 (3, pros::E_MOTOR_GEAR_GREEN, true);
 pros::Motor RM2 (4, pros::E_MOTOR_GEAR_GREEN, true);
-double previousErrorL = 0;
-double intergalL = 0;
-double previousErrorR = 0;
-double intergalR = 0;
+double previousErrorL[] = {0, 0};
+double intergalL[] = {0, 0};
+double previousErrorR[] = {0, 0};
+double intergalR[] = {0, 0};
+
 std::ofstream XValues("xvalues.txt");
 std::ofstream YValues("yvalues.txt");
+
 pros::Motor_Group LMG({LM1, LM2});
 pros::Motor_Group RMG({RM1, RM2});
+
+
 void initialize() {
 	pros::lcd::initialize();
 	// arms::init();
@@ -53,7 +57,7 @@ double pid(double error, double* pe, double* in, double kp, double ki,
 	return speed;
 }
 
-double pidTurn(double angle) {
+double pidTurn(double angle, pros::motor_gearset_e_t gearset) {
 	/*
 	Convert angle to encoder units
 	Runs PID function
@@ -62,32 +66,43 @@ double pidTurn(double angle) {
 	GREEN (18:1) : 900  Encoder Units / 360 Degrees  (900/rev)
 	RED   (36:1) : 1800 Envoder Units / 360 Degrees? (1800/rev)
 	*/
-	return 0;
+
+	double units = 0;
+
+	switch(gearset) {
+		case 0: units = angle*0.2; break; // E_MOTOR_GEARSET_36
+		case 1: units = angle*0.4; break; // E_MOTOR_GEARSET_18
+		case 2: units = angle*1.2; break; // E_MOTOR_GEARSET_06
+	}
+	
+	return 0; // Add pid() function
 }
 
 void opcontrol() {
 	int i = 0;
-	double targetAngleL = 900;
 	while (true) {
-		// Call PID for each movement motor so it doesn't over/undershoot due to averaging the positions
-		double currentAngleL = LM1.get_position();
-		if(currentAngleL == targetAngleL && i < 250) {
-			targetAngleL += 900;
-			i++;
-		}
-		// double currentAngleL = (LMG.get_positions()[1] + LMG.get_positions()[0])/2;
-		double targetAngleR = -10000;
-		double currentAngleR = (RMG.get_positions()[1] + RMG.get_positions()[0])/2;
-		double errorL = targetAngleL-currentAngleL;
-		double errorR = targetAngleR-currentAngleR;
-		double outputL = pid(errorL, &previousErrorL, &intergalL, 0.25, 0.003, 0.11);
-		double outputR = pid(errorR, &previousErrorR, &intergalR, 0.25, 0.002, 0.1);
-		pros::lcd::set_text(0, "Left: " + std::to_string(outputL) + " " + std::to_string(LM1.get_position()));
+		double currentAngleL[] = {LM1.get_position(), LM2.get_position()};
+		double targetAngleL[] = {-10000, -10000};
+
+		double currentAngleR[] = {RM1.get_position(), RM2.get_position()};
+		double targetAngleR[] = {-10000, -10000};
+
+		double errorL[] = {targetAngleL[0]-currentAngleL[0], targetAngleL[1]-currentAngleL[1]};
+		double errorR[] = {targetAngleR[0]-currentAngleR[0], targetAngleR[1]-currentAngleR[1]};
+
+		double outputL1 = pid(errorL[0], &previousErrorL[0], &intergalL[0], 0.25, 0.003, 0.11);
+		double outputL2 = pid(errorL[1], &previousErrorL[1], &intergalL[1], 0.25, 0.003, 0.11);
+		double outputR1 = pid(errorR[0], &previousErrorR[0], &intergalR[0], 0.25, 0.002, 0.1);
+		double outputR2 = pid(errorR[1], &previousErrorR[1], &intergalR[1], 0.25, 0.002, 0.1);
+		pros::lcd::set_text(0, "Left: " + std::to_string(outputL1) + " " + std::to_string(LM1.get_position()));
 		pros::lcd::set_text(1, std::to_string(i));
-		std::cout<<outputL<<endl<<outputR<<endl;
+		std::cout<<outputL1<<endl<<outputR1<<endl;
 		// pros::lcd::set_text(1, "Right: " + std::to_string(outputR) + " " + std::to_string(currentAngleR));
-		LM1.move_velocity(outputL);
-		//RMG.move_velocity(outputR);
+		LM1.move_velocity(outputL1);
+		LM2.move_velocity(outputL2);
+		RM1.move_velocity(outputR1);
+		RM2.move_velocity(outputR2);
+
 		pros::delay(10);
     }	
 }
