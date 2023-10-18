@@ -29,6 +29,7 @@ pros::Motor catapult_motor(3, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENC
 bool catapult_shooting = false;
 double previous_error = 0;
 double integral = 0;
+double target_distance = 0;
 
 double pid(double error, double* pe, double* in, double kp, double ki, double kd) {
     double derivative = error - *pe;
@@ -89,8 +90,7 @@ void competition_initialize() {}
  */
 void autonomous() {}
 
-void fire_catapult() {
-    double target_distance = 0;
+void fire_catapult_toggle() {
     while (true) {
         pros::lcd::set_text(3, std::to_string(catapult_motor.get_position()));
 
@@ -108,7 +108,6 @@ void fire_catapult() {
                 double output = pid(error, &previous_error, &integral, 0.25, 0.002, 0.1);
                 pros::lcd::set_text(0, std::to_string(output) + " " + std::to_string(current_distance));
                 catapult_motor.move_velocity(output);
-                // pros::lcd::set_text(0, std::to_string(conRX) + " " + std::to_string(conLY) + " ");// + std::to_string(v) +  std::to_string(v2));
                 pros::delay(10);
 
                 if (!catapult_shooting) {
@@ -149,7 +148,7 @@ void drive_robot() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-    pros::Task catapult_task(fire_catapult);
+    pros::Task catapult_toggle_task(fire_catapult_toggle);
     pros::Task drive_task(drive_robot);
 
     while (true) {
@@ -161,6 +160,5 @@ void opcontrol() {
             }
         }
 
-        pros::delay(10);
     }
 }
