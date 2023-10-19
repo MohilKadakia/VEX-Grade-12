@@ -18,7 +18,7 @@ pros::Motor left_motor_3(3, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER
 pros::Motor right_motor_1(4, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_motor_2(7, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_motor_3(6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-
+pros::ADIDigitalOut wings('h');
 pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
 
@@ -43,8 +43,7 @@ void competition_initialize() {}
 
 void autonomous() {}
 
-double pid(double error, double* pe, double* in, double kp, double ki,
-           double kd) {
+double pid(double error, double* pe, double* in, double kp, double ki, double kd) {
 
 	double derivative = error - *pe;
 	if ((*pe > 0 && error < 0) || (*pe < 0 && error > 0))
@@ -61,7 +60,7 @@ double pid(double error, double* pe, double* in, double kp, double ki,
 	return speed;
 }
 
-double pidTurn(double angle, pros::motor_gearset_e_t gearset) {
+double pidTurnUnits(double angle, pros::motor_gearset_e_t gearset) {
 	/*
 	Convert angle to encoder units
 	Runs PID function
@@ -79,39 +78,45 @@ double pidTurn(double angle, pros::motor_gearset_e_t gearset) {
 		case 2: units = angle*1.2; break; // E_MOTOR_GEARSET_06
 	}
 	
-	return 0; // Add pid() function
+	return units;
 }
 
 void opcontrol() {
 	int i = 0;
 	while (true) {
-		double currentAngleL[3] = {left_motor_1.get_position(), left_motor_2.get_position(), left_motor_3.get_position()};
-		double currentAngleR[3] = {right_motor_1.get_position(), right_motor_2.get_position(), right_motor_3.get_position()};
-		double targetAngleL = 900;
-		double targetAngleR = 900;
+		// double currentAngleL[3];
+		// double currentAngleR[3];
+		// double errorL[3];
+		// double errorR[3];
 
-		double errorL[3];
-		double errorR[3];
+		double targetAngleL = pidTurnUnits(360, MOTOR_GEAR_BLUE);
+		double targetAngleR = pidTurnUnits(360, MOTOR_GEAR_BLUE);
 
 		double outputL[3];
 		double outputR[3];
 
+		bool activatePneumatics = controller.get_digital(pros::E_CONTROLLER_DIGITAL_A);
+		if (activatePneumatics) {
+			wings.set_value(true);
+		} else {
+			wings.set_value(false);
+		}
+
 		for(int i = 0; i < 3; i++) {
-			currentAngleL[i] = left_motors.get_positions()[i];
-			currentAngleR[i] = right_motors.get_positions()[i];
+			// currentAngleL[i] = left_motors.get_positions()[i];
+			// currentAngleR[i] = right_motors.get_positions()[i];
 
-			errorL[i] = targetAngleL-currentAngleL[i];
-			errorR[i] = targetAngleR-currentAngleR[i];
+			// errorL[i] = targetAngleL-currentAngleL[i];
+			// errorR[i] = targetAngleR-currentAngleR[i];
 
-			outputL[i] = pid(errorL[i], &previousErrorL[i], &intergalL[i], 0.8, 0.0005, 0.4);
-			outputR[i] = pid(errorR[i], &previousErrorR[i], &intergalR[i], 0.8, 0.0005, 0.4);
-
+			outputL[i] = pid(targetAngleL - left_motors.get_positions()[i], &previousErrorL[i], &intergalL[i], 0.8, 0.0005, 0.4);
+			outputR[i] = pid(targetAngleR - right_motors.get_positions()[i], &previousErrorR[i], &intergalR[i], 0.8, 0.0005, 0.4);
 		}
 		
 		pros::lcd::set_text(0, "Left: " + std::to_string(outputL[0]) + " " + std::to_string(left_motor_1.get_position()));
-		pros::lcd::set_text(1, std::to_string(i));
+		pros::lcd::set_text(1, "Right: " + std::to_string(outputR[0]) + " " + std::to_string(right_motor_1.get_position()));
+		// pros::lcd::set_text(1, std::to_string(i));
 		// std::cout<<outputL1<<endl<<outputR1<<endl;
-		// pros::lcd::set_text(1, "Right: " + std::to_string(outputR) + " " + std::to_string(currentAngleR));
 		for(int i = 0; i < 3; i++) {
 			left_motors[i].move_velocity(outputL[i]);
 			right_motors[i].move_velocity(outputR[i]);
