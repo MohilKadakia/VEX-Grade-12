@@ -2,6 +2,7 @@
 #include "ARMS/api.h"
 #include "ARMS/config.h"
 #include <string>
+#include <cmath>
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
@@ -83,10 +84,24 @@ void fire_catapult_toggle() {
     }
 }
 
+double move_multiple(double x) {
+	return -0.4 * cos((360.0/254.0)*x)+0.6;
+}
+
+std::string set_controller_temperatures(pros::Motor_Group *motors) {
+	std::string temperatures = "";
+	for(int i = 0; i < 3; i++) {
+		temperatures += motors->get_temperatures()[i];
+	}
+	return temperatures;
+}
+
 void drive_robot() {
 	while (true) {
-		int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-		int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+		int right_x = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+		double multiple = 1.0;
+		int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + (right_x * move_multiple(right_x)) * multiple;
+		int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - (right_x * move_multiple(right_x)) * multiple;
 		left_motors.move(std::clamp(moveL, -127, 127));
 		right_motors.move(std::clamp(moveR, -127, 127));
 		pros::lcd::set_text(1, "Left: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
@@ -95,19 +110,24 @@ void drive_robot() {
     }	
 }
 
-
 void opcontrol() {
+	pros::lcd::set_text(1, "Enters the OPControl");
+	pros::Controller master(pros::E_CONTROLLER_MASTER);
     pros::Task catapult_toggle_task(fire_catapult_toggle);
     pros::Task drive_task(drive_robot);
+	master.clear();
 
-    while (true) {
-        // Check R2 button to toggle firing
+	while (true) {
+		// master.set_text(2, 0, set_controller_temperatures(&left_motors));
+		master.set_text(2, 0, std::to_string(left_motor_1.get_temperature()));
+		master.set_text(1, 0, set_controller_temperatures(&right_motors));
+
+		// Check R2 button to toggle firing
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             catapult_shooting = !catapult_shooting;
             while (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
                 pros::delay(10);
             }
         }
-
-    }
+    }	
 }
