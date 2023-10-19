@@ -3,18 +3,40 @@
 #include <string>
 #include <iostream>
 #define endl '\n'
+#define PORT1 1
+#define PORT2 2
+#define PORT3 3
+#define PORT4 4
+#define PORT5 7
+#define PORT6 6
+#define PORT7 7
+#define PORT8 8
+#define PORT9 9
+#define PORT10 10
+#define PORT11 11
+#define PORT12 12
+#define PORT13 13
+#define PORT14 14
+#define PORT15 15
+#define PORT16 16
+#define PORT17 17
+#define PORT18 18
+#define PORT19 19
+#define PORT20 20
+
 
 // Left Side Motors
-pros::Motor left_motor_1(1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor left_motor_2(2, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor left_motor_3(3, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor left_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor left_motor_2(PORT2, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor left_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
-pros::Motor right_motor_1(4, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor right_motor_2(7, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor right_motor_3(6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor right_motor_1(PORT4, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor right_motor_2(PORT5, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor right_motor_3(PORT6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
 pros::ADIDigitalOut wings('h');
-pros::
+pros::IMU IMU1(PORT9);
+pros::IMU IMU1(PORT10);
 
 
 void initialize() {
