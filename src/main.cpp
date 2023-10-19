@@ -35,8 +35,7 @@ pros::Motor right_motor_2(PORT5, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_E
 pros::Motor right_motor_3(PORT6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
 pros::ADIDigitalOut wings('h');
-pros::IMU IMU1(PORT9);
-pros::IMU IMU1(PORT10);
+pros::IMU IMU[] = {PORT9, PORT10};
 
 
 void initialize() {
@@ -48,7 +47,11 @@ void disabled() {}
 
 void competition_initialize() {}
 
-void autonomous() {}
+void autonomous() {
+	for (int i = 0; i < 2; i++){
+		pros::lcd::set_text(i, std::to_string(IMU[i].get_yaw()));
+	}
+}
 
 void opcontrol() {
 	pros::lcd::set_text(1, "Enters the OPControl");
