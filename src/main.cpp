@@ -49,7 +49,12 @@ void competition_initialize() {}
 
 void autonomous() {
 	for (int i = 0; i < 2; i++){
-		pros::lcd::set_text(i, std::to_string(IMU[i].get_yaw()));
+		IMU[i].reset();
+	}
+	while(true){
+		for (int i = 0; i < 2; i++){
+			pros::lcd::set_text(i, std::to_string(IMU[i].get_yaw()));
+		}
 	}
 }
 
