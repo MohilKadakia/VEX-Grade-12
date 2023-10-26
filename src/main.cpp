@@ -13,6 +13,7 @@ pros::Motor catapult_motor(3, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENC
 // pros::Motor intake_motor_1(8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 bool catapult_shooting = false;
+bool wings_active = false;
 double previous_error = 0;
 double integral = 0;
 double target_distance = 0;
@@ -25,6 +26,8 @@ pros::Motor right_motor_1(4, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODE
 pros::Motor right_motor_2(7, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_motor_3(6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
+
+pros::ADIDigitalOut wings('h');
 
 double pid(double error, double* pe, double* in, double kp, double ki, double kd) {
     double derivative = error - *pe;
@@ -84,6 +87,18 @@ void fire_catapult_toggle() {
     }
 }
 
+double wings_pneumatic() {
+    while(true) {
+        if (wings_active) {
+            pros::lcd::set_text(2, "Pneumatics Active");
+            while (wings_active) {
+                wings.set_value(true);
+            }       
+        }
+    }
+    pros::delay(10);
+}
+
 double move_multiple(double x) {
 	return -0.4 * cos((360.0/254.0)*x)+0.6;
 }
@@ -114,6 +129,7 @@ void opcontrol() {
 	pros::lcd::set_text(1, "Enters the OPControl");
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
     pros::Task catapult_toggle_task(fire_catapult_toggle);
+    pros::Task wings_pneumatic_task(wings_pneumatic);
     pros::Task drive_task(drive_robot);
 	master.clear();
 
@@ -126,6 +142,14 @@ void opcontrol() {
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             catapult_shooting = !catapult_shooting;
             while (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+                pros::delay(10);
+            }
+        }
+
+		// Check A button to toggle firing
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+            wings_active = !wings_active;
+            while (master.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
                 pros::delay(10);
             }
         }
