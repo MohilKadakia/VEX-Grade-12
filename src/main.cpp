@@ -26,15 +26,18 @@
 
 
 // Left Side Motors
-// pros::Motor left_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-// pros::Motor left_motor_2(PORT2, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
-// pros::Motor left_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
-// pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
+pros::Motor left_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor left_motor_2(PORT2, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor left_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
+// Right Side Motors
 pros::Motor right_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_motor_2(PORT2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
+// Pnemuatic Wings
 pros::ADIDigitalOut wings('h');
+// Inertial Sensors
 pros::IMU IMU[] = {PORT9, PORT10};
 
 
@@ -51,27 +54,27 @@ void competition_initialize() {}
 
 void autonomous() {
 	
-	while(true){
-		pros::lcd::set_text(3, "fart");
-		
-	}
 }
+void Drive(pros::Controller master)
+{
+	int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+	int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+	left_motors.move(std::clamp(moveL, -127, 127));
+	right_motors.move(std::clamp(moveR, -127, 127));
+}
+void DebugValues(pros::Controller master)
+{
+	pros::lcd::set_text(0, "LMtop:" + std::to_string(left_motor_1.get_encoder_units()) + " LMfro" + std::to_string(left_motor_2.get_encoder_units()) + " LMbac" + std::to_string(left_motor_3.get_encoder_units()));
+	pros::lcd::set_text(1, "RMtop:" + std::to_string(right_motor_1.get_encoder_units()) + " RMfro" + std::to_string(right_motor_2.get_encoder_units()) + " RMbac" + std::to_string(right_motor_3.get_encoder_units()));
+	pros::lcd::set_text(2, "ISfro" + std::to_string(IMU[0].get_yaw()) + "ISbac" + std::to_string(IMU[1].get_yaw()));
 
+
+}
 void opcontrol() {
-	pros::lcd::set_text(1, "Enters the OPControl");
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	while (true) {
-		int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-		int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-		//left_motors.move(std::clamp(moveL, -127, 127));
-		right_motors.move(std::clamp(moveR, -127, 127));
-		//pros::lcd::set_text(1, "Left: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
-		pros::lcd::set_text(2, "Right: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
-		
-		for (int i = 0; i < 2; i++){
-			//pros::lcd::set_text(i+3, std::to_string(IMU[i].get_yaw()));
-			pros::lcd::set_text(i+5, std::to_string(right_motors.get_efficiencies()[i]));
-		}
+		Drive(master);
+		DebugValues(master);
 		pros::delay(10);
     }	
 }
