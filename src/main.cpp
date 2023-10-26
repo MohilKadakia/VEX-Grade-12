@@ -7,7 +7,7 @@
 #define PORT2 2
 #define PORT3 3
 #define PORT4 4
-#define PORT5 7
+#define PORT5 5
 #define PORT6 6
 #define PORT7 7
 #define PORT8 8
@@ -26,13 +26,13 @@
 
 
 // Left Side Motors
-pros::Motor left_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor left_motor_2(PORT2, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor left_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
-pros::Motor right_motor_1(PORT4, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor right_motor_2(PORT5, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor right_motor_3(PORT6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor left_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor left_motor_2(PORT2, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor left_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+// pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
+pros::Motor right_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor right_motor_2(PORT2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor right_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
 pros::ADIDigitalOut wings('h');
 pros::IMU IMU[] = {PORT9, PORT10};
@@ -40,7 +40,9 @@ pros::IMU IMU[] = {PORT9, PORT10};
 
 void initialize() {
 	pros::lcd::initialize();
-	
+	for (int i = 0; i < 2; i++){
+		IMU[i].reset();
+	}
 }
 
 void disabled() {}
@@ -48,13 +50,10 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
-	for (int i = 0; i < 2; i++){
-		IMU[i].reset();
-	}
+	
 	while(true){
-		for (int i = 0; i < 2; i++){
-			pros::lcd::set_text(i, std::to_string(IMU[i].get_yaw()));
-		}
+		pros::lcd::set_text(3, "fart");
+		
 	}
 }
 
@@ -64,10 +63,15 @@ void opcontrol() {
 	while (true) {
 		int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 		int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-		left_motors.move(std::clamp(moveL, -127, 127));
+		//left_motors.move(std::clamp(moveL, -127, 127));
 		right_motors.move(std::clamp(moveR, -127, 127));
-		pros::lcd::set_text(1, "Left: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
+		//pros::lcd::set_text(1, "Left: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
 		pros::lcd::set_text(2, "Right: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
+		
+		for (int i = 0; i < 2; i++){
+			//pros::lcd::set_text(i+3, std::to_string(IMU[i].get_yaw()));
+			pros::lcd::set_text(i+5, std::to_string(right_motors.get_efficiencies()[i]));
+		}
 		pros::delay(10);
     }	
 }
