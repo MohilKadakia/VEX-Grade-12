@@ -155,12 +155,29 @@ void drive_robot() {
 }
 
 
+void turn_right(double target_angle) {
+    while (true) {
+        double error_inertial_1 = target_angle - IMU[0].get_yaw();
+        double error_inertial_2 = target_angle - IMU[1].get_yaw();
+
+        double average_inertial_error = (error_inertial_1 + error_inertial_2) / 2;
+
+        double left_motor_velocity = pid(error_inertial_1, &previousErrorL, &intergalL, 50.0, 0.0005, 0.4);
+        double right_motor_velocity = pid(error_inertial_2, &previousErrorR, &intergalR, 50.0, 0.0005, 0.4);
+
+        left_motors.move_velocity(left_motor_velocity);
+        right_motors.move_velocity(-right_motor_velocity);
+
+        if (average_inertial_error > 5 || average_inertial_error < 5) {
+            break;
+        }
+    }
+}
+
 void opcontrol() {
     pros::Task catapult_toggle_task(fire_catapult_toggle);
     pros::Task catapult_single_shoot_task(fire_catapult_single);    
     pros::Task drive_task(drive_robot);
-
-    double targetAngle = 90;
 
     while (true) {
 
@@ -184,19 +201,8 @@ void opcontrol() {
             }
         }
 
-        
-
-        double error_inertial_1 = targetAngle - IMU[0].get_yaw();
-        double error_inertial_2 = targetAngle - IMU[1].get_yaw();
-
-        double average_inertial_error = (error_inertial_1 + error_inertial_2) / 2;
-
-        double left_motor_velocity = pid(error_inertial_1, &previousErrorL, &intergalL, 50.0, 0.0005, 0.4);
-        double right_motor_velocity = pid(error_inertial_2, &previousErrorR, &intergalR, 50.0, 0.0005, 0.4);
-
-        left_motors.move_velocity(left_motor_velocity);
-        right_motors.move_velocity(-right_motor_velocity);
-
+        turn_right(90);
+                
 		// double outputL[3];
 		// double outputR[3];
 
