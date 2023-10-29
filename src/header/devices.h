@@ -1,6 +1,9 @@
 #include "main.h"
 #include "ports.h"
 
+// Controller
+pros::Controller master(pros::E_CONTROLLER_MASTER);
+
 // Movement Motors
 // Left Motors
 pros::Motor left_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
@@ -21,3 +24,6 @@ pros::Motor catapult_motor(PORT7, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_E
 
 // Intake Motor
 pros::Motor intake_motor(PORT8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
+
+// Inertial Sensor
+pros::ADIDigitalOut wings('h');

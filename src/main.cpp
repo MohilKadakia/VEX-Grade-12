@@ -5,18 +5,14 @@
 #include <cmath>
 
 #include "header/ports.h"
-#include "header/motors.h"
+#include "header/devices.h"
 #include "header/pid.hh"
-
-pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 bool catapult_shooting = false;
 bool wings_active = false;
 double previous_error = 0;
 double integral = 0;
 double target_distance = 0;
-
-pros::ADIDigitalOut wings('h');
 
 void initialize() {
 	arms::init();
@@ -99,7 +95,6 @@ void drive_robot() {
 
 void opcontrol() {
 	pros::lcd::set_text(1, "Enters the OPControl");
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
     pros::Task catapult_toggle_task(fire_catapult_toggle);
     pros::Task wings_pneumatic_task(wings_pneumatic);
     pros::Task drive_task(drive_robot);
