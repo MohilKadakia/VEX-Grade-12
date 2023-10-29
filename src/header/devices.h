@@ -26,4 +26,4 @@ pros::Motor catapult_motor(PORT7, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_E
 pros::Motor intake_motor(PORT8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 // Inertial Sensor
-pros::ADIDigitalOut wings('h');
+pros::ADIDigitalOut wings(PORTH);
