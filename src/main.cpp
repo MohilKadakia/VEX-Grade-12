@@ -5,7 +5,9 @@
 #include <string>
 
 bool cata_active = false;
-
+double pid_previous_time = 0;
+double pid_previous_error = 0;
+double pid_intergal = 0;
 void ResetInertialSensors()
 {
 	for (int i = 0; i < 2; i++){
