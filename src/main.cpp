@@ -28,7 +28,21 @@ void disabled() {}
 
 void competition_initialize() {}
 
-void autonomous() {}
+void autonomous() { 
+	pros::lcd::set_text(1, "Enters the Skills Autonomous Period");
+    pros::Task catapult_toggle_task(fire_catapult_toggle);
+
+    catapult_shooting = !catapult_shooting;
+    double current_time;
+    double target_time = current_time + 10000;
+
+    while (current_time < target_time) {
+        current_time = pros::millis();
+        if (current_time > target_time) {
+            catapult_shooting = !catapult_shooting;            
+        }        
+    }
+}
 
 void fire_catapult_toggle() {
     while (true) {
@@ -105,7 +119,7 @@ void opcontrol() {
     pros::Task drive_task(drive_robot);
 
 	while (true) {
-		// Check R2 button to toggle firing
+		// Check R2 button to toggle catapult firing
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             catapult_shooting = !catapult_shooting;
             while (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
@@ -113,7 +127,7 @@ void opcontrol() {
             }
         }
 
-		// Check A button to toggle firing
+		// Check L2 button to toggle Wings
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
             wings_active = !wings_active;
             while (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
