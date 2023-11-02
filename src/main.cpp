@@ -5,13 +5,13 @@
 #include "header/functions.hh"
 #include <string>
 
-
 void reset_inertial()
 {
 	for (int i = 0; i < 2; i++){
 		IMU[i].reset();
 	}
 }
+
 void drive()
 {
 	int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -19,22 +19,27 @@ void drive()
 	left_motors.move(std::clamp(moveL, -127, 127));
 	right_motors.move(std::clamp(moveR, -127, 127));
 }
+
 void initialize()
 {
 	pros::lcd::initialize();
 	ResetInertialSensors();
 }
-void disabled() {
+
+void disabled() 
+{
 	pros::lcd::clear();
 	while (1){
 		pros::lcd::set_text(0, "Disabled");
 		pros::delay(10);
 	}
 }
+
 void competition_initialize()
 {
 	ResetInertialSensors();
 }
+
 void autonomous()
 {
 	pros::lcd::clear();
