@@ -5,20 +5,7 @@
 #include "header/functions.hh"
 #include <string>
 
-void reset_inertial()
-{
-	for (int i = 0; i < 2; i++){
-		IMU[i].reset();
-	}
-}
 
-void drive()
-{
-	int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-	int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-	left_motors.move(std::clamp(moveL, -127, 127));
-	right_motors.move(std::clamp(moveR, -127, 127));
-}
 
 void initialize()
 {
@@ -29,7 +16,8 @@ void initialize()
 void disabled() 
 {
 	pros::lcd::clear();
-	while (1){
+	while (true)
+	{
 		pros::lcd::set_text(0, "Disabled");
 		pros::delay(10);
 	}
@@ -43,8 +31,9 @@ void competition_initialize()
 void autonomous()
 {
 	pros::lcd::clear();
-	ResetInertialSensors();
-	while (1){
+	reset_inertial();
+	while (true)
+	{
 		pros::lcd::set_text(0, "Auto");
 		pros::delay(10);
 	}
@@ -53,7 +42,7 @@ void autonomous()
 void opcontrol()
 {
 	pros::lcd::clear();
-	ResetInertialSensors();
+	reset_inertial();
 
 	pros::Task catapult_task(catapult_trigger);
 	pros::Task drive_task(drive);
