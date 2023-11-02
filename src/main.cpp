@@ -84,13 +84,12 @@ void drive_robot() {
 }
 
 void opcontrol() {
+    pros::lcd::clear();
+	reset_inertial();
+    
     pros::lcd::set_text(1, "Enters the OPControl");
     pros::Task wings_pneumatic_task(wings_pneumatic);
     pros::Task drive_task(drive_robot);
-    
-    pros::lcd::clear();
-	reset_inertial();
-
 	pros::Task catapult_task(catapult_trigger);
 	pros::Task drive_task(drive);
 	pros::Task debug_task(debug_values);
@@ -108,5 +107,7 @@ void opcontrol() {
                 pros::delay(10);
             }
         }
+
+        pros::delay(10);
     }	
 }
