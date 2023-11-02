@@ -1,2 +1,2 @@
-# VEX-Grade-12
-VEX code for grade 12
+# Shawn Halliday's Branch
+The branch where i update all my silly code that I made
