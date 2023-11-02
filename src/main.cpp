@@ -12,23 +12,6 @@
 
 bool wings_active = false;
 
-void reset_inertial()
-{
-	for (int i = 0; i < 2; i++){
-		IMU[i].reset();
-	}
-}
-
-void drive()
-{
-    while(true) {
-        int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-        int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-        left_motors.move(std::clamp(moveL, -127, 127));
-        right_motors.move(std::clamp(moveR, -127, 127));
-    }
-}
-
 void initialize()
 {
 	arms::init();
@@ -59,6 +42,23 @@ void autonomous()
 		pros::lcd::set_text(0, "Auto");
 		pros::delay(10);
 	}
+}
+
+void reset_inertial()
+{
+	for (int i = 0; i < 2; i++){
+		IMU[i].reset();
+	}
+}
+
+void drive()
+{
+    while(true) {
+        int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        left_motors.move(std::clamp(moveL, -127, 127));
+        right_motors.move(std::clamp(moveR, -127, 127));
+    }
 }
 
 double wings_pneumatic() {
