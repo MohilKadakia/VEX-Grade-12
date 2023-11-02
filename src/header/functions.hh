@@ -1,4 +1,4 @@
 #ifndef _functions_HH_
 #define _functions_HH_
-double reset_inertial();
+void reset_inertial();
 #endif

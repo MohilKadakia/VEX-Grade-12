@@ -3,7 +3,7 @@
 
 bool wings_active = false;
 
-double wings_pneumatic() {
+void wings_pneumatic() {
     while(true) {
         if (wings_active) {
             pros::lcd::set_text(2, "Pneumatics Active");
