@@ -1,4 +1,7 @@
 #include "main.h"
+double pid_previous_time = 0;
+double pid_previous_error = 0;
+double pid_intergal = 0;
 double pid(double error, double* pe, double* in, double kp, double ki, double kd)
 {
     double derivative = error - *pe;
