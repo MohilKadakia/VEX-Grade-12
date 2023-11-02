@@ -9,4 +9,5 @@ double catapult_trigger(bool* active);
 void debug_values();
 void drive();
 double pid(double error, double* pe, double* in, double kp, double ki, double kd);
+double pidReal(double error, double* pe, double* pt, double* in, double kp, double ki, double kd);
 #endif
