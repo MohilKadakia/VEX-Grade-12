@@ -45,19 +45,8 @@ void autonomous()
 
 void reset_inertial()
 {
-	for (int i = 0; i < 2; i++){
-		IMU[i].reset();
-	}
-}
-
-void drive()
-{
-    while(true) {
-        int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-        int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-        left_motors.move(std::clamp(moveL, -127, 127));
-        right_motors.move(std::clamp(moveR, -127, 127));
-    }
+    IMU[0].reset();
+    IMU[1].reset();
 }
 
 double move_multiple(double x) {
@@ -76,9 +65,6 @@ void drive_robot() {
 		left_motors.move(std::clamp(left_motor_velocity, -127, 127));
 		right_motors.move(std::clamp(right_motor_velocity, -127, 127));
 		
-        pros::lcd::set_text(1, "Left: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
-		pros::lcd::set_text(2, "Right: " + std::to_string(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
-		
         pros::delay(10);
     }	
 }
@@ -87,13 +73,10 @@ void opcontrol() {
     pros::lcd::clear();
 	reset_inertial();
     
-    pros::lcd::set_text(1, "Enters the OPControl");
     pros::Task wings_pneumatic_task(wings_pneumatic);
     pros::Task drive_task(drive_robot);
 	pros::Task catapult_task(catapult_trigger);
-	pros::Task drive_task(drive);
 	pros::Task debug_task(debug_values);
-
 
 	while (true) {
         if (catapult_active) {
