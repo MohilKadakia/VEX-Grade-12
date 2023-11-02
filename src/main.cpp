@@ -1,30 +1,79 @@
 #include "main.h"
 #include "ARMS/api.h"
 #include "ARMS/config.h"
+
 #include <string>
 #include <cmath>
 
-#include "header/ports.h"
 #include "header/devices.h"
 #include "header/pid.hh"
+#include "header/ports.h"
+#include "header/functions.hh"
 
-bool catapult_shooting = false;
-bool wings_active = false;
-double previous_error = 0;
-double integral = 0;
-double target_distance = 0;
+void reset_inertial()
+{
+	for (int i = 0; i < 2; i++){
+		IMU[i].reset();
+	}
+}
 
-void initialize() {
+void drive()
+{
+  while(true) {
+    int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    left_motors.move(std::clamp(moveL, -127, 127));
+    right_motors.move(std::clamp(moveR, -127, 127));
+  }
+}
+
+void initialize()
+{
 	arms::init();
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Inititalizing v1");
+	reset_inertial();
 }
 
-void disabled() {}
+void disabled() 
+{
+	pros::lcd::clear();
+	while (1){
+		pros::lcd::set_text(0, "Disabled");
+		pros::delay(10);
+	}
+}
 
-void competition_initialize() {}
+void competition_initialize()
+{
+	reset_inertial();
+}
 
-void autonomous() {}
+void autonomous()
+{
+	pros::lcd::clear();
+	reset_inertial();
+	while (1){
+		pros::lcd::set_text(0, "Auto");
+		pros::delay(10);
+	}
+}
+
+void opcontrol()
+{
+	pros::lcd::clear();
+	ResetInertialSensors();
+
+	pros::Task catapult_task(catapult_trigger);
+	pros::Task drive_task(drive);
+	pros::Task debug_task(debug_values);
+	while (true)
+	{
+		if (catapult_active) {
+			catapult_motor.move_absolute(1000.0, 600);
+        }
+		pros::delay(10);
+
 
 void fire_catapult_toggle() {
     while (true) {
@@ -95,11 +144,22 @@ void drive_robot() {
 
 void opcontrol() {
 	pros::lcd::set_text(1, "Enters the OPControl");
-    pros::Task catapult_toggle_task(fire_catapult_toggle);
-    pros::Task wings_pneumatic_task(wings_pneumatic);
-    pros::Task drive_task(drive_robot);
+  pros::Task catapult_toggle_task(fire_catapult_toggle);
+  pros::Task wings_pneumatic_task(wings_pneumatic);
+  pros::Task drive_task(drive_robot);
+  
+  pros::lcd::clear();
+	reset_inertial();
+
+	pros::Task catapult_task(catapult_trigger);
+	pros::Task drive_task(drive);
+	pros::Task debug_task(debug_values);
+
 
 	while (true) {
+    if (catapult_active) {
+			catapult_motor.move_absolute(1000.0, 600);
+    }
 		// Check R2 button to toggle firing
         if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             catapult_shooting = !catapult_shooting;
