@@ -8,9 +8,8 @@
 #include "header/devices.h"
 #include "header/pid.hh"
 #include "header/ports.h"
-#include "header/functions.hh"
-
-bool wings_active = false;
+#include "header/catapult.hh"
+#include "header/wings.hh"
 
 void initialize()
 {
@@ -59,20 +58,6 @@ void drive()
         left_motors.move(std::clamp(moveL, -127, 127));
         right_motors.move(std::clamp(moveR, -127, 127));
     }
-}
-
-double wings_pneumatic() {
-    while(true) {
-        if (wings_active) {
-            pros::lcd::set_text(2, "Pneumatics Active");
-            while (wings_active) {
-                wings.set_value(true);
-            }       
-        } else {
-            wings.set_value(false);
-        }
-    }
-    pros::delay(10);
 }
 
 double move_multiple(double x) {
