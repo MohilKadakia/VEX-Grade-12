@@ -5,10 +5,11 @@
 #include <string>
 #include <cmath>
 
+#include "header/catapult.hh"
 #include "header/devices.h"
+#include "header/functions.hh"
 #include "header/pid.hh"
 #include "header/ports.h"
-#include "header/catapult.hh"
 #include "header/wings.hh"
 
 void initialize()
@@ -41,12 +42,6 @@ void autonomous()
 		pros::lcd::set_text(0, "Auto");
 		pros::delay(10);
 	}
-}
-
-void reset_inertial()
-{
-    IMU[0].reset();
-    IMU[1].reset();
 }
 
 double move_multiple(double x) {
