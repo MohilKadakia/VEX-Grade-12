@@ -10,11 +10,7 @@
 #include "header/ports.h"
 #include "header/functions.hh"
 
-bool catapult_shooting = false;
 bool wings_active = false;
-double previous_error = 0;
-double integral = 0;
-double target_distance = 0;
 
 void reset_inertial()
 {
@@ -25,12 +21,12 @@ void reset_inertial()
 
 void drive()
 {
-  while(true) {
-    int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-    int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-    left_motors.move(std::clamp(moveL, -127, 127));
-    right_motors.move(std::clamp(moveR, -127, 127));
-  }
+    while(true) {
+        int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        left_motors.move(std::clamp(moveL, -127, 127));
+        right_motors.move(std::clamp(moveR, -127, 127));
+    }
 }
 
 void initialize()
@@ -63,36 +59,6 @@ void autonomous()
 		pros::lcd::set_text(0, "Auto");
 		pros::delay(10);
 	}
-}
-
-void fire_catapult_toggle() {
-    while (true) {
-        pros::lcd::set_text(3, std::to_string(catapult_motor.get_position()));
-
-        if (catapult_shooting) {
-            target_distance += 1000;
-            pros::lcd::set_text(2, "Rewinding Catapult");
-            while (true) {
-                double current_distance = catapult_motor.get_position();
-                
-                if (current_distance > (target_distance - 5)) {
-                    break;
-                }
-                
-                double error = target_distance - current_distance;
-                double output = pid(error, &previous_error, &integral, 0.25, 0.002, 0.1);
-                pros::lcd::set_text(0, std::to_string(output) + " " + std::to_string(current_distance));
-                catapult_motor.move_velocity(output);
-                pros::delay(10);
-
-                if (!catapult_shooting) {
-                    break;
-                }
-            }       
-        }
-
-        pros::delay(10);
-    }
 }
 
 double wings_pneumatic() {
@@ -133,12 +99,11 @@ void drive_robot() {
 }
 
 void opcontrol() {
-	pros::lcd::set_text(1, "Enters the OPControl");
-  pros::Task catapult_toggle_task(fire_catapult_toggle);
-  pros::Task wings_pneumatic_task(wings_pneumatic);
-  pros::Task drive_task(drive_robot);
-  
-  pros::lcd::clear();
+    pros::lcd::set_text(1, "Enters the OPControl");
+    pros::Task wings_pneumatic_task(wings_pneumatic);
+    pros::Task drive_task(drive_robot);
+    
+    pros::lcd::clear();
 	reset_inertial();
 
 	pros::Task catapult_task(catapult_trigger);
@@ -147,15 +112,8 @@ void opcontrol() {
 
 
 	while (true) {
-    if (catapult_active) {
-			catapult_motor.move_absolute(1000.0, 600);
-    }
-		// Check R2 button to toggle firing
-        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-            catapult_shooting = !catapult_shooting;
-            while (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-                pros::delay(10);
-            }
+        if (catapult_active) {
+                catapult_motor.move_absolute(1000.0, 600);
         }
 
 		// Check A button to toggle firing
