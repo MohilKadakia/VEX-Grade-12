@@ -1,19 +1,27 @@
 #include "main.h"
-#include "header/devices.h"
-#include "header/ports.h"
-#include "header/functions.hh"
+
 #include <string>
+#include <cmath>
+
+#include "header/catapult.hh"
+#include "header/devices.h"
+#include "header/drive.hh"
+#include "header/functions.hh"
+#include "header/pid.hh"
+#include "header/ports.h"
+#include "header/wings.hh"
 
 void initialize()
 {
 	pros::lcd::initialize();
+	pros::lcd::set_text(1, "Inititalizing v1");
 	reset_inertial();
 }
 
 void disabled() 
 {
 	pros::lcd::clear();
-	while (true){
+	while (1){
 		pros::lcd::set_text(0, "Disabled");
 		pros::delay(10);
 	}
@@ -28,25 +36,34 @@ void autonomous()
 {
 	pros::lcd::clear();
 	reset_inertial();
-	while (true){
+	while (1){
 		pros::lcd::set_text(0, "Auto");
 		pros::delay(10);
 	}
 }
 
-void opcontrol()
-{
-	pros::lcd::clear();
+void opcontrol() {
+    pros::lcd::clear();
 	reset_inertial();
-
+    
+    pros::Task wings_pneumatic_task(wings_pneumatic);
+    pros::Task drive_task(drive_robot);
 	pros::Task catapult_task(catapult_trigger);
-	pros::Task drive_task(drive);
 	pros::Task debug_task(debug_values);
-	while (true)
-	{
-		if (catapult_active) {
-			catapult_motor.move_absolute(1000.0, 600);
+
+	while (true) {
+        if (catapult_active) {
+                catapult_motor.move_absolute(1000.0, 600);
         }
-		pros::delay(10);
+
+		// Check A button to toggle firing
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            wings_active = !wings_active;
+            while (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+                pros::delay(10);
+            }
+        }
+
+        pros::delay(10);
     }	
 }
