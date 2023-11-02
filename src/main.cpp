@@ -10,6 +10,12 @@
 #include "header/ports.h"
 #include "header/functions.hh"
 
+bool catapult_shooting = false;
+bool wings_active = false;
+double previous_error = 0;
+double integral = 0;
+double target_distance = 0;
+
 void reset_inertial()
 {
 	for (int i = 0; i < 2; i++){
@@ -58,22 +64,6 @@ void autonomous()
 		pros::delay(10);
 	}
 }
-
-void opcontrol()
-{
-	pros::lcd::clear();
-	ResetInertialSensors();
-
-	pros::Task catapult_task(catapult_trigger);
-	pros::Task drive_task(drive);
-	pros::Task debug_task(debug_values);
-	while (true)
-	{
-		if (catapult_active) {
-			catapult_motor.move_absolute(1000.0, 600);
-        }
-		pros::delay(10);
-
 
 void fire_catapult_toggle() {
     while (true) {
