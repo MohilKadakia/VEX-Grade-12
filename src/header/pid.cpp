@@ -1,4 +1,3 @@
-#include <cmath>
 #include "main.h"
 double pid(double error, double* pe, double* in, double kp, double ki, double kd)
 {

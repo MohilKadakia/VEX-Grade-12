@@ -4,18 +4,17 @@
 #include "header/ports.h"
 #include <string>
 
-bool cata_active = false;
+bool catapult_active = false;
 double pid_previous_time = 0;
 double pid_previous_error = 0;
 double pid_intergal = 0;
-void ResetInertialSensors()
+void reset_inertial()
 {
 	for (int i = 0; i < 2; i++){
 		IMU[i].reset();
 	}
 }
-
-void Drive(pros::Controller master)
+void drive()
 {
 	int moveL = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 	int moveR = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -23,36 +22,44 @@ void Drive(pros::Controller master)
 	right_motors.move(std::clamp(moveR, -127, 127));
 }
 
-void CatapultTrigger(pros::Controller master, bool* active)
-{	
-	bool cata_button = master.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
-	if (cata_button)
-	{
-		*active = !*active;
-		
-	}
-	pros::delay(20);
-}
 
 void initialize()
 {
 	pros::lcd::initialize();
 	ResetInertialSensors();
 }
-
-void disabled() {}
-
+void disabled() {
+	pros::lcd::clear();
+	while (1){
+		pros::lcd::set_text(0, "Disabled");
+		pros::delay(10);
+	}
+}
 void competition_initialize()
 {
 	ResetInertialSensors();
 }
-
 void autonomous()
 {
+	pros::lcd::clear();
 	ResetInertialSensors();
+	while (1){
+		pros::lcd::set_text(0, "Auto");
+		pros::delay(10);
+	}
 }
-
-void DebugValues(pros::Controller master)
+void debug_values()
+void catapult_trigger(bool* active)
+{	
+	// bool cata_button = master.get_digital(pros::E_CONTROLLER_DIGITAL_R2);
+	while(true) {
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+		{
+			&active = !&active;
+		}
+		pros::delay(10);
+	}
+}
 {
 	pros::lcd::set_text(0, "Displacement: LMtop:" + std::to_string(left_motor_1.get_encoder_units()) + " LMfro" + std::to_string(left_motor_2.get_encoder_units()) + " LMbac" + std::to_string(left_motor_3.get_encoder_units()));
 	pros::lcd::set_text(1, "Displacement: RMtop:" + std::to_string(right_motor_1.get_encoder_units()) + " RMfro" + std::to_string(right_motor_2.get_encoder_units()) + " RMbac" + std::to_string(right_motor_3.get_encoder_units()));
@@ -63,13 +70,17 @@ void DebugValues(pros::Controller master)
 }
 void opcontrol()
 {
+	pros::lcd::clear();
 	ResetInertialSensors();
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
+
+	pros::Task cata_trigger(catapult_trigger (bool*)catapult_active);
 	while (true)
 	{
-		Drive(master);
-		DebugValues(master); 
-		//pros::Task myTask(CatapultTrigger, (pros::Controller)"master");
+		drive();
+		debug_values(); 
+		if (catapult_active) {
+			catapult_motor.move_absolute(1000.0, 600);
+        }
 		pros::delay(10);
     }	
 }

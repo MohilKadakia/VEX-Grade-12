@@ -1,6 +1,9 @@
 #include "main.h"
 #include "ports.h"
 
+// Controller
+pros::Controller master(pros::E_CONTROLLER_MASTER);
+
 // Motors
 // Left Motors
 pros::Motor left_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
