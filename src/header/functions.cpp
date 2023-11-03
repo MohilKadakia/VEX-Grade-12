@@ -1,6 +1,6 @@
 #include <cmath>
 #include "main.h"
-#include "devices.h"
+#include "devices.hh"
 
 double pid_previous_time = 0;
 double pid_previous_error = 0;

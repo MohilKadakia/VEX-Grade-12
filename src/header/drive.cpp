@@ -1,4 +1,4 @@
-#include "devices.h"
+#include "devices.hh"
 
 double move_multiple(double x) {
 	return -0.4 * cos((360.0/254.0)*x)+0.6;

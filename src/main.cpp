@@ -5,7 +5,7 @@
 
 #include "header/catapult.hh"
 #include "header/controls.h"
-#include "header/devices.h"
+#include "header/devices.hh"
 #include "header/drive.hh"
 #include "header/functions.hh"
 #include "header/ports.h"

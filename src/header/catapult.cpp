@@ -1,6 +1,6 @@
 #include "main.h"
 #include "controls.h"
-#include "devices.h"
+#include "devices.hh"
 
 bool catapult_active = false;
 

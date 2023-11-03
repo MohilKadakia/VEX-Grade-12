@@ -1,5 +1,5 @@
 #include "main.h"
-#include "devices.h"
+#include "devices.hh"
 
 bool wings_active = false;
 
