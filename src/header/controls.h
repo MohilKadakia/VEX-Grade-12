@@ -1,0 +1,4 @@
+#include "main.h"
+
+#define CATAPULT_CONTROL pros::E_CONTROLLER_DIGITAL_R2
+#define WINGS_CONTROL pros::E_CONTROLLER_DIGITAL_L2

@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "header/catapult.hh"
+#include "header/controls.h"
 #include "header/devices.h"
 #include "header/drive.hh"
 #include "header/functions.hh"
@@ -56,9 +57,9 @@ void opcontrol() {
         }
 
 		// Check A button to toggle firing
-        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+        if (master.get_digital(WINGS_CONTROL)) {
             wings_active = !wings_active;
-            while (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            while (master.get_digital(WINGS_CONTROL)) {
                 pros::delay(10);
             }
         }

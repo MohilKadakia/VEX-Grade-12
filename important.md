@@ -4,7 +4,7 @@ Left Joystick - Move Robot Forward/Backwards
 
 Right Joystick - Turn Robot
 
-Button A - Toggle Wings
+Button A - 
 
 Button B - 
 
@@ -22,7 +22,7 @@ Button Right -
 
 Button L1 - 
 
-Button L2 - 
+Button L2 - Toggle Wings
 
 Button R1 - 
 

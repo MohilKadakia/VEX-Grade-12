@@ -1,4 +1,5 @@
 #include "main.h"
+#include "controls.h"
 #include "devices.h"
 
 bool catapult_active = false;
@@ -15,7 +16,7 @@ void debug_values()
 void catapult_trigger()
 {	
 	while(true) {
-		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+		if (master.get_digital(CATAPULT_CONTROL))
 		{
 			catapult_active = !catapult_active;
 			pros::delay(90);
