@@ -2,6 +2,7 @@
 #include "devices.h"
 
 bool catapult_active = false;
+bool wings_active = false;
 double pid_previous_time = 0;
 double pid_previous_error = 0;
 double pid_intergal = 0;
@@ -25,6 +26,18 @@ void catapult_trigger()
 		pros::delay(10);
 	}
 }
+void wings_trigger()
+{	
+	while(true) {
+		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+		{
+			wings_active = !wings_active;
+			pros::delay(90);
+		}
+		pros::delay(10);
+	}
+}
+
 void reset_inertial()
 {
 	for (int i = 0; i < 2; i++){

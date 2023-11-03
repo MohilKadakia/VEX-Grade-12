@@ -40,13 +40,23 @@ void opcontrol()
 	reset_inertial();
 
 	pros::Task catapult_task(catapult_trigger);
+	pros::Task wings_task(wings_trigger);
 	pros::Task drive_task(drive);
 	pros::Task debug_task(debug_values);
 	while (true)
 	{
 		if (catapult_active) {
-			catapult_motor.move_absolute(1000.0, 600);
+			catapult_motor.move_velocity(600);
         }
+		else {
+			catapult_motor.set_velocity(0);
+		}
+		if (wings_active) {
+			wings.set_value(false);
+		}
+		else {
+			wings.set_value(true);
+		}
 		pros::delay(10);
     }	
 }
