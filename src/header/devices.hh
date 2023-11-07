@@ -14,8 +14,8 @@ extern pros::Motor right_motor_3;
 extern pros::Motor_Group left_motors;
 extern pros::Motor_Group right_motors;
 
-extern pros::Motor catapult_motor;
-extern pros::Motor intake_motor;
+extern pros::Motor catapult_motor_1;
+extern pros::Motor catapult_motor_2;
 
 extern pros::IMU IMU[];
 extern pros::ADIDigitalOut wings;

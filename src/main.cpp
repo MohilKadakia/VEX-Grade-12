@@ -53,7 +53,8 @@ void opcontrol() {
 
 	while (true) {
         if (catapult_active) {
-                catapult_motor.move_absolute(1000.0, 600);
+                catapult_motor_1.move_absolute(1000.0, 600);
+                catapult_motor_2.move_absolute(1000.0, 600);
         }
 
 		// Check A button to toggle firing
