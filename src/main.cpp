@@ -14,7 +14,7 @@
 void initialize()
 {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Inititalizing v1");
+	pros::lcd::set_text(0, "Inititalizing v1");
 	reset_inertial();
 }
 
@@ -49,13 +49,15 @@ void opcontrol() {
     pros::Task wings_pneumatic_task(wings_pneumatic);
     pros::Task drive_task(drive_robot);
 	pros::Task catapult_task(catapult_trigger);
-	pros::Task debug_task(debug_values);
 
 	while (true) {
-        if (master.get_digital(CATAPULT_CONTROL)) {
-			catapult_motor_1.move_voltage(127);
-			catapult_motor_2.move_voltage(127);
-        }
+		if (master.get_digital(CATAPULT_CONTROL))
+		{
+			catapult_active = !catapult_active;
+			while(master.get_digital(CATAPULT_CONTROL)) {
+				pros::delay(10);
+			}
+		}
 
 		// Check A button to toggle firing
         if (master.get_digital(WINGS_CONTROL)) {

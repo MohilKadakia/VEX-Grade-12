@@ -13,14 +13,19 @@ void debug_values()
 	pros::lcd::set_text(4, "Yaw: ISfro" + std::to_string(IMU[0].get_yaw()) + "ISbac" + std::to_string(IMU[1].get_yaw()));
 	pros::lcd::set_text(5, "Catapult: " + std::to_string(catapult_active));
 }
+
 void catapult_trigger()
 {	
 	while(true) {
-		if (master.get_digital(CATAPULT_CONTROL))
-		{
-			catapult_active = !catapult_active;
-			pros::delay(90);
-		}
+		if (catapult_active) {
+            pros::lcd::set_text(2, "Catapult Active");
+            while (catapult_active) {
+				catapult_motors.move(127);
+			}
+        } else {
+            catapult_motors.move(0);
+        }
+		
 		pros::delay(10);
 	}
 }
