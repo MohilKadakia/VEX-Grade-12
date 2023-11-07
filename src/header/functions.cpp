@@ -1,5 +1,5 @@
 #include "main.h"
-#include "devices.h"
+#include "devices.hh"
 
 bool catapult_active = false;
 bool wings_active = false;
@@ -21,7 +21,7 @@ void catapult_trigger()
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
 		{
 			catapult_active = !catapult_active;
-			pros::delay(90);
+			pros::delay(90); 
 		}
 		pros::delay(10);
 	}
@@ -32,7 +32,7 @@ void wings_trigger()
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
 		{
 			wings_active = !wings_active;
-			pros::delay(90);
+			pros::delay(140);
 		}
 		pros::delay(10);
 	}

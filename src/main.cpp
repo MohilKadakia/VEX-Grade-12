@@ -1,5 +1,5 @@
 #include "main.h"
-#include "header/devices.h"
+#include "header/devices.hh"
 #include "header/ports.h"
 #include "header/functions.hh"
 #include <string>
@@ -43,13 +43,13 @@ void opcontrol()
 	pros::Task wings_task(wings_trigger);
 	pros::Task drive_task(drive);
 	pros::Task debug_task(debug_values);
-	while (true)
+	while (true) 
 	{
 		if (catapult_active) {
-			catapult_motor.move_velocity(600);
+			catapult_motors.move_voltage(127);
         }
 		else {
-			catapult_motor.move_velocity(0);
+			catapult_motors.move_voltage(0);
 		}
 		if (wings_active) {
 			wings.set_value(false);
