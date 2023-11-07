@@ -52,9 +52,9 @@ void opcontrol() {
 	pros::Task debug_task(debug_values);
 
 	while (true) {
-        if (catapult_active) {
-                catapult_motor_1.move_absolute(1000.0, 600);
-                catapult_motor_2.move_absolute(1000.0, 600);
+        if (master.get_digital(CATAPULT_CONTROL)) {
+			catapult_motor_1.move_voltage(127);
+			catapult_motor_2.move_voltage(127);
         }
 
 		// Check A button to toggle firing
