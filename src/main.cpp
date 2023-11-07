@@ -49,7 +49,7 @@ void opcontrol()
 			catapult_motor.move_velocity(600);
         }
 		else {
-			catapult_motor.set_velocity(0);
+			catapult_motor.move_velocity(0);
 		}
 		if (wings_active) {
 			wings.set_value(false);

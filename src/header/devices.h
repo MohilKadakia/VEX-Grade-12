@@ -29,4 +29,4 @@ pros::Motor intake_motor(PORT8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_EN
 pros::IMU IMU[] = {PORT9, PORT10};
 
 // Pneumatics
-pros::ADIDigitalOut wings(PORTH);
+pros::ADIDigitalOut wings(PORTA);
