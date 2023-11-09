@@ -45,28 +45,13 @@ void autonomous()
 void opcontrol() {
     pros::lcd::clear();
 	reset_inertial();
-    
-    pros::Task wings_pneumatic_task(wings_pneumatic);
     pros::Task drive_task(drive_robot);
 	pros::Task catapult_task(catapult_trigger);
-
+	pros::Task wings_task(wings_trigger);
+	//pros::Task catapult_task(debug_values);
 	while (true) {
-		if (master.get_digital(CATAPULT_CONTROL))
-		{
-			catapult_active = !catapult_active;
-			while(master.get_digital(CATAPULT_CONTROL)) {
-				pros::delay(10);
-			}
-		}
-
-		// Check A button to toggle firing
-        if (master.get_digital(WINGS_CONTROL)) {
-            wings_active = !wings_active;
-            while (master.get_digital(WINGS_CONTROL)) {
-                pros::delay(10);
-            }
-        }
-
+		handle_catapult();
+		handle_wings();
         pros::delay(10);
     }	
 }

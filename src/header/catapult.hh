@@ -3,4 +3,5 @@
 extern bool catapult_active;
 void debug_values();
 void catapult_trigger();
+void handle_catapult();
 #endif
