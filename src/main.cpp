@@ -36,12 +36,11 @@ void competition_initialize()
 void autonomous()
 {
 	pros::lcd::clear();
-	reset_inertial();
-	pros::delay(3000);
-	turn_left(180);
-	left_motors.move_velocity(0);
-	right_motors.move_velocity(0);
-	pros::delay(10);
+	// reset_inertial();
+	// turn(180);
+	left_motors.move_absolute(1666, 100);
+	right_motors.move_absolute(1666, 100);
+	// 1000eu = 16.5in
 }
 
 void opcontrol() {
