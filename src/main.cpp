@@ -10,6 +10,7 @@
 #include "header/functions.hh"
 #include "header/ports.h"
 #include "header/wings.hh"
+#include "header/auto.hh"
 
 void initialize()
 {
@@ -36,10 +37,11 @@ void autonomous()
 {
 	pros::lcd::clear();
 	reset_inertial();
-	while (1){
-		pros::lcd::set_text(0, "Auto");
-		pros::delay(10);
-	}
+	pros::delay(3000);
+	turn_left(180);
+	left_motors.move_velocity(0);
+	right_motors.move_velocity(0);
+	pros::delay(10);
 }
 
 void opcontrol() {

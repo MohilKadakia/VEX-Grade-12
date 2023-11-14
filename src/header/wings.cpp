@@ -18,11 +18,7 @@ void wings_trigger() {
 void handle_wings()
 {
     if (wings_active)
-    {   
         wings.set_value(true);
-    }
     else
-    {
         wings.set_value(false);
-    }
 }

@@ -12,9 +12,9 @@ Button X -
 
 Button Y - 
 
-Button Up - 
+Button Up - Drive Motor Speed Up (To be implemented)
 
-Button Down - 
+Button Down - Drive Motor Speed Down (To be implemented)
 
 Button Left - 
 
