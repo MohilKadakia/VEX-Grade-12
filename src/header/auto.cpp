@@ -39,3 +39,35 @@ void turn(double degree) {
 	right_motors.move_velocity(0);
     buffer_period_active = false;
 }
+
+void move(double cm) {
+    double distance = cm*23.7;
+
+    double start_rotation_left = 0;
+    double start_rotation_right = 0;
+
+    for(int i = 0; i < 3; i++) {
+        start_rotation_left += left_motors.get_positions()[i];
+        start_rotation_right += right_motors.get_positions()[i];
+    }
+
+    start_rotation_left /= 3;
+    start_rotation_right /= 3;
+
+    double avg_left_motors = start_rotation_left;
+    double avg_right_motors = start_rotation_right;
+
+    while(fabs(start_rotation_left+distance - avg_left_motors) > 1) {
+        avg_left_motors = 0;
+        avg_right_motors = 0;
+        for(int i = 0; i < 3; i++) {
+            avg_left_motors += left_motors.get_positions()[i];
+            avg_right_motors += right_motors.get_positions()[i];
+        }
+        avg_left_motors /= 3;
+        avg_right_motors /= 3;
+        double output = pid((start_rotation_left+distance)-avg_left_motors, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
+        left_motors.move(output);
+        right_motors.move(output);
+    }
+}
