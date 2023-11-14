@@ -38,9 +38,10 @@ void autonomous()
 	pros::lcd::clear();
 	// reset_inertial();
 	// turn(180);
-	left_motors.move_absolute(1666, 100);
-	right_motors.move_absolute(1666, 100);
-	// 1000eu = 16.5in
+	left_motors.move_absolute(2370, 100);
+	right_motors.move_absolute(2370, 100);
+	// 2313eu = 1m (Theoretical)
+	// 2370 ~= 1m
 }
 
 void opcontrol() {

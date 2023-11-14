@@ -30,7 +30,7 @@ void catapult_trigger()
 void handle_catapult()
 {
 	if (catapult_active)
-		catapult_motors.move(75);
+		catapult_motors.move(87);
 	else
 		catapult_motors.move(0);
 }
