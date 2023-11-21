@@ -12,9 +12,9 @@ Button X -
 
 Button Y - 
 
-Button Up - 
+Button Up - Drive Motor Speed Up (To be implemented)
 
-Button Down - 
+Button Down - Drive Motor Speed Down (To be implemented)
 
 Button Left - 
 
@@ -74,9 +74,9 @@ PORT 5 - Movement Right Front Motor
 
 PORT 6 - Movement Right Back Motor
 
-PORT 7 - Catapult Motor
+PORT 7 - Catapult Motor 1
 
-PORT 8 - Intake Motor
+PORT 8 - Catapult Motor 2
 
 PORT 9 - IMU Sensor ?
 

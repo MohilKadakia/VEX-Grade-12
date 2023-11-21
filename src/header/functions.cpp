@@ -2,10 +2,6 @@
 #include "main.h"
 #include "devices.hh"
 
-double pid_previous_time = 0;
-double pid_previous_error = 0;
-double pid_intergal = 0;
-
 double pid(double error, double* pe, double* in, double kp, double ki, double kd) {
     double derivative = error - *pe;
     if ((*pe > 0 && error < 0) || (*pe < 0 && error > 0))
@@ -24,6 +20,6 @@ double pid(double error, double* pe, double* in, double kp, double ki, double kd
 
 void reset_inertial()
 {
-    IMU[0].reset();
-    IMU[1].reset();
+    IMU[0].reset(true);
+    IMU[1].reset(true);
 }

@@ -17,15 +17,20 @@ void debug_values()
 void catapult_trigger()
 {	
 	while(true) {
-		if (catapult_active) {
-            pros::lcd::set_text(2, "Catapult Active");
-            while (catapult_active) {
-				catapult_motors.move(127);
+		if (master.get_digital(master_R2))
+		{
+			catapult_active = !catapult_active;
+			while(master.get_digital(master_R2)) {
+				pros::delay(10);
 			}
-        } else {
-            catapult_motors.move(0);
-        }
-		
+		}
 		pros::delay(10);
 	}
+}
+void handle_catapult()
+{
+	if (catapult_active)
+		catapult_motors.move(87);
+	else
+		catapult_motors.move(0);
 }
