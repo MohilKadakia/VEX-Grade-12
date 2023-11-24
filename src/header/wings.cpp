@@ -15,10 +15,14 @@ void wings_trigger() {
     }
     pros::delay(10);
 }
-void handle_wings()
-{
-    if (wings_active)
-        wings.set_value(true);
-    else
-        wings.set_value(false);
+
+void handle_wings() {
+    if (wings_active) {
+        wings.set_value(1);
+        pros::lcd::set_text(0, "working");
+    }
+    else {
+        wings.set_value(0);
+        pros::lcd::set_text(0, "Not Working");
+    }
 }

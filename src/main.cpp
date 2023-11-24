@@ -35,13 +35,25 @@ void competition_initialize()
 
 void autonomous()
 {
-	pros::lcd::clear();
-	// reset_inertial();
-	// turn(180);
-	left_motors.move_absolute(2370, 100);
-	right_motors.move_absolute(2370, 100);
-	// 2313eu = 1m (Theoretical)
-	// 2370 ~= 1m
+	pros::lcd::set_text(0, "Entered Autonomous Mode");
+	reset_inertial();
+
+	move_backward(30);
+
+	// move(130);
+	// wings.set_value(1);
+	// turn_left_to_look_at(-90);
+	// move(50);
+
+	pros::lcd::set_text(0, "Turn Completed");
+
+	// pros::lcd::clear();
+	// // reset_inertial();
+	// // turn(180);
+	// left_motors.move_absolute(2370, 100);
+	// right_motors.move_absolute(2370, 100);
+	// // 2313eu = 1m (Theoretical)
+	// // 2370 ~= 1m
 }
 
 void opcontrol() {
