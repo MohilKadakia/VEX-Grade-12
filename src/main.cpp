@@ -11,6 +11,7 @@
 #include "header/ports.h"
 #include "header/wings.hh"
 #include "header/auto.hh"
+#include "header/intake.hh"
 
 void initialize()
 {
@@ -62,10 +63,12 @@ void opcontrol() {
     pros::Task drive_task(drive_robot);
 	pros::Task catapult_task(catapult_trigger);
 	pros::Task wings_task(wings_trigger);
+	pros::Task intake_task(intake_trigger);
 	//pros::Task catapult_task(debug_values);
 	while (true) {
 		handle_catapult();
 		handle_wings();
+		handle_intake();
         pros::delay(10);
     }	
 }
