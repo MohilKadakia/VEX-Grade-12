@@ -18,7 +18,7 @@ void drive_robot() {
 		int right_x = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) * -1;
 		
         int left_motor_velocity = (left_y + (right_x * move_multiple(right_x)));
-		int right_motor_velocity = (left_y - (right_x * move_multiple(right_x))) ;
+		int right_motor_velocity = (left_y - (right_x * move_multiple(right_x)));
 
 		left_motors.move(std::clamp(left_motor_velocity, -127, 127));
 		right_motors.move(std::clamp(right_motor_velocity, -127, 127));
