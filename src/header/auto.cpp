@@ -265,14 +265,11 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
 
         double current_inertial_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
         double error = average_inertial_start_angle - current_inertial_angle;
-        double output = pid(error, &previous_error_turn, &integral_turn, 0.0000000000001, 0.1, 0.05);
-
-        // left_motors.move(base_speed - error);
-        // right_motors.move(base_speed + error);
+        double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 
         master.set_text(0, 0, std::to_string(output));
-        left_motors.move_velocity(std::clamp(base_speed - output, lowest_base_speed, fastest_base_speed));
-        right_motors.move_velocity(std::clamp(base_speed + output, lowest_base_speed, fastest_base_speed));
+        left_motors.move(std::clamp(base_speed - output, lowest_base_speed, fastest_base_speed));
+        right_motors.move(std::clamp(base_speed + output, lowest_base_speed, fastest_base_speed));
     }
     left_motors.move(0);
     right_motors.move(0);

@@ -11,13 +11,14 @@
 #include "header/ports.h"
 #include "header/wings.hh"
 #include "header/auto.hh"
+#include "header/intake.hh"
 
-void initialize()
-{
-	pros::lcd::initialize();
-	pros::lcd::set_text(0, "Inititalizing v1");
-	reset_inertial();
-}
+// void initialize()
+// {
+// 	pros::lcd::initialize();
+// 	pros::lcd::set_text(0, "Inititalizing v1");
+// 	reset_inertial();
+// }
 
 void disabled() 
 {
@@ -31,11 +32,28 @@ void disabled()
 void competition_initialize() {
 	reset_inertial();
 }
-
 void autonomous() {
 
-	move_forward_inertial(150, -60.0, 60.0, 50.0);
-	master.set_text(0, 0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw())/2));
+	// move_forward_inertial(50, -100.0, 100.0, 80.0);
+
+	// wings.set_value(1);
+	// left_motors.move(80);
+	// right_motors.move(110);
+	// pros::delay(700);
+	// wings.set_value(0);
+	// pros::delay(1000);
+	// left_motors.move(0);
+	// right_motors.move(0);
+	// move_backward(80.0, -50.0, 50.0);
+
+	// master.set_text(0, 0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw())/2));
+	// turn_left_to_look_at(-45);
+	// move_forward_inertial(15, -30.0, 30.0, 20);
+	// pros::delay(500);
+	// turn_right_to_look_at(0);
+	// wings.set_value(1);
+	// move_forward_inertial(15, -50.0, 50.0, 40);
+
 	// left side
 	// push triball into net
 	// move_forward(168, -50.0, 50.0);
