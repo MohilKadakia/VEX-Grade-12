@@ -34,17 +34,35 @@ void competition_initialize() {
 }
 void autonomous() {
 
-	// move_forward_inertial(50, -100.0, 100.0, 80.0);
 
 	// wings.set_value(1);
-	// left_motors.move(80);
-	// right_motors.move(110);
-	// pros::delay(700);
+	left_motors.move(-110);
+	right_motors.move(-80);
 	// wings.set_value(0);
-	// pros::delay(1000);
-	// left_motors.move(0);
-	// right_motors.move(0);
+	pros::delay(1400);
+	left_motors.move(0);
+	right_motors.move(0);
+
+	pros::delay(100);
+	left_motors.move(110);
+	right_motors.move(80);
+	wings.set_value(1);
+	pros::delay(400);
+	wings.set_value(0);
+	pros::delay(1000);
+	left_motors.move(0);
+	right_motors.move(0);
+	
+	// intake.set_value(1);
+	// intake.set_value(0);
+
 	// move_backward(80.0, -50.0, 50.0);
+	// turn_right_to_look_at(5);
+	// move_forward_inertial(100.0, -100.0, 100.0, 80.0);
+	// move_backward(150.0, -100.0, 100.0);
+	// move_forward_inertial(300.0, -100.0, 100.0, 80.0);
+	// turn_right_to_look_at(45);
+
 
 	// master.set_text(0, 0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw())/2));
 	// turn_left_to_look_at(-45);
