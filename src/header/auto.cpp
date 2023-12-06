@@ -98,8 +98,8 @@ void turn_right_to_look_at(double degrees) {
         // left_motors.move_velocity(-output);
         // right_motors.move_velocity(output);
 
-        left_motors.move_velocity(-(std::clamp(output, 0.0, 90.0)));
-        right_motors.move_velocity((std::clamp(output, 0.0, 90.0)));
+        left_motors.move_velocity(fabs((std::clamp(output, -90.0, 90.0))));
+        right_motors.move_velocity(-fabs(std::clamp(output, -90.0, 90.0)));
         pros::delay(20);
     }
     left_motors.move_velocity(0);
@@ -111,6 +111,8 @@ void turn_right_to_look_at(double degrees) {
 void turn_left_to_look_at(double degrees)
 {
     double average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
+    double left_motor_velocity = 0;
+    double right_motor_velocity = 0;
     master.clear();
     while (fabs(degrees - average_inertial_degree) > 1) {
         average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
@@ -122,8 +124,8 @@ void turn_left_to_look_at(double degrees)
         // left_motors.move_velocity(-output);
         // right_motors.move_velocity(output);
 
-        left_motors.move_velocity(-(std::clamp(output, -90.0, 0.0)));
-        right_motors.move_velocity(+(std::clamp(output, -90.0, 0.0)));
+        left_motors.move_velocity(-fabs((std::clamp(output, -90.0, 90.0))));
+        right_motors.move_velocity(fabs(std::clamp(output, -90.0, 90.0)));
         pros::delay(20);
     }
     left_motors.move_velocity(0);
@@ -268,8 +270,8 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
         double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 
         master.set_text(0, 0, std::to_string(output));
-        left_motors.move(std::clamp(base_speed - output, lowest_base_speed, fastest_base_speed));
-        right_motors.move(std::clamp(base_speed + output, lowest_base_speed, fastest_base_speed));
+        left_motors.move(std::clamp(base_speed + output, lowest_base_speed, fastest_base_speed));
+        right_motors.move(std::clamp(base_speed - output, lowest_base_speed, fastest_base_speed));
     }
     left_motors.move(0);
     right_motors.move(0);
