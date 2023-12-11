@@ -33,42 +33,30 @@ void competition_initialize() {
 	reset_inertial();
 }
 void autonomous() {
+	right_motors.move(80);
+	left_motors.move(110);
+	pros::delay(1500);
+	left_motors.move(0);
+	right_motors.move(0);
 
-
-	move_forward_inertial(500, -80.0, 80.0, 60.0);
-
-	// pros::delay(5000);
-
-	// move_forward_inertial(200.0, -80.0, 80.0, 50.0);
-
-	// // wings.set_value(1);
-	// left_motors.move(-110);
-	// right_motors.move(-80);
-	// // wings.set_value(0);
-	// pros::delay(1400);
-	// left_motors.move(0);
-	// right_motors.move(0);
-
-	// pros::delay(100);
-	// left_motors.move(110);
-	// right_motors.move(80);
-	// wings.set_value(1);
-	// pros::delay(400);
-	// wings.set_value(0);
-	// pros::delay(1000);
-	// left_motors.move(0);
-	// right_motors.move(0);
+	move_backward(70.0, -50.0, 50.0);
+	turn_right_to_look_at(45);
+	move_backward(50.0, -90.0, 90.0);
+	turn_right_to_look_at(60);
 	
-	// intake.set_value(1);
-	// intake.set_value(0);
-
-	// move_backward(80.0, -50.0, 50.0);
-	// turn_right_to_look_at(5);
-	// move_forward_inertial(100.0, -100.0, 100.0, 80.0);
-	// move_backward(150.0, -100.0, 100.0);
-	// move_forward_inertial(300.0, -100.0, 100.0, 80.0);
-	// turn_right_to_look_at(45);
-
+	catapult_motors.move(87);
+	pros::delay(25000);
+	catapult_motors.move(0);
+	// pros::delay(5000);
+	move_forward_inertial(20.0, -50.0, 50.0, 40.0);
+	reset_inertial();
+	turn_right_to_look_at(90);
+	move_forward_inertial(120.0, -50.0, 50.0, 40.0);
+	turn_left_to_look_at(50); 
+	catapult_motors.move(100);
+	move_forward_inertial(700.0, -100.0, 100.0, 80.0);
+	catapult_motors.move(0);
+	turn_left_to_look_at(-45);
 }
 
 void opcontrol() {
