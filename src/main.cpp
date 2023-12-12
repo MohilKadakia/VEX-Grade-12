@@ -42,19 +42,22 @@ void autonomous() {
 	move_backward(70.0, -50.0, 50.0);
 	turn_right_to_look_at(45);
 	move_backward(50.0, -90.0, 90.0);
-	turn_right_to_look_at(60);
-	
+	left_motors.move(25);
+	// turn_right_to_look_at(80);
+	pros::delay(300);
+	left_motors.move(0);
+
 	catapult_motors.move(87);
-	pros::delay(25000);
+	pros::delay(30000);
 	catapult_motors.move(0);
 	// pros::delay(5000);
 	move_forward_inertial(20.0, -50.0, 50.0, 40.0);
 	reset_inertial();
 	turn_right_to_look_at(90);
 	move_forward_inertial(120.0, -50.0, 50.0, 40.0);
-	turn_left_to_look_at(50); 
+	turn_left_to_look_at(45); // this may require tweaking 
 	catapult_motors.move(100);
-	move_forward_inertial(700.0, -100.0, 100.0, 80.0);
+	move_forward_inertial(500.0, -100.0, 100.0, 80.0);
 	catapult_motors.move(0);
 	turn_left_to_look_at(-45);
 }
