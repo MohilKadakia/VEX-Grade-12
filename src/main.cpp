@@ -62,11 +62,11 @@ void autonomous() { // Auton near (right) side
 	right_motors.move(125);
 	pros::delay(400);
 	wings.set_value(1);
-	pros::delay(400);
-	wings.set_value(0);
-	left_motors.move(75);
-	right_motors.move(75);
 	pros::delay(500);
+	wings.set_value(0);
+	left_motors.move(127);
+	right_motors.move(50);
+	pros::delay(750);
 	left_motors.move(0);
 	right_motors.move(0);
 	pros::delay(100);
