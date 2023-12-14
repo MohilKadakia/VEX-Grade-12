@@ -24,8 +24,9 @@ void hold(double holdValue, double holdTime){
 	double startTime = pros::millis();
 	double upperLimit = startTime+(holdTime*1000);
 	while (pros::millis() < upperLimit){
-		pros::lcd::set_text(0, std::to_string(std::clamp((upperLimit-pros::millis())/1000, holdValue, 127.0)*(holdValue*holdTime)));
-		master.set_text(0 , 0, std::to_string(std::clamp((upperLimit-pros::millis())/1000, holdValue, 127.0)*(holdValue*holdTime)));
+		pros::lcd::set_text(0, std::to_string(std::clamp((upperLimit-(pros::millis()+5500))/1000, 1.0, 127.0)*(holdValue)));
+		master.set_text(0 , 0, std::to_string(std::clamp((upperLimit-(pros::millis()+5500))/1000, 1.0, 127.0)*(holdValue)));
+		catapult_motors.move(std::clamp((upperLimit-(pros::millis()+3000))/1000, 1.0, 127.0)*(holdValue));
 	}
 }
 
@@ -41,7 +42,7 @@ void disabled()
 void competition_initialize() {
 	reset_inertial();
 }
-void autonomous__() { // Auton far side
+void autonomous() { // Auton far side
 
 
 	hold(32, 6);
