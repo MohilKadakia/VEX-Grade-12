@@ -17,7 +17,7 @@ void initialize()
 {
 	// pros::lcd::initialize();
 	// pros::lcd::set_text(0, "Inititalizing v1");
-	reset_inertial();
+	//reset_inertial();
 }
 
 void disabled() 
@@ -30,44 +30,47 @@ void disabled()
 }
 
 void competition_initialize() {
-	reset_inertial();
+	//reset_inertial();
 }
-void autonomous__() { // Auton far (left) side
-	left_motors.move(-110);
-	right_motors.move(-80);
-	pros::delay(1400);
-	left_motors.move(0);
-	right_motors.move(0);
+// void autonomous__() { // Auton far (left) side
+// 	left_motors.move(-110);
+// 	right_motors.move(-70);
+// 	pros::delay(1400);
+// 	left_motors.move(0);
+// 	right_motors.move(0);
 
-	pros::delay(100);
-	left_motors.move(110);
-	right_motors.move(80);
-	wings.set_value(1);
-	pros::delay(400);
-	wings.set_value(0);
-	pros::delay(1000);
-	left_motors.move(0);
-	right_motors.move(0);
-}
+// 	pros::delay(100);
+// 	left_motors.move(110);
+// 	right_motors.move(40);
+// 	wings.set_value(1);
+// 	pros::delay(500);
+// 	wings.set_value(0);
+// 	pros::delay(1000);
+// 	left_motors.move(0);
+// 	right_motors.move(0);
+// }
 
 void autonomous() { // Auton near (right) side
-	left_motors.move(-80);
-	right_motors.move(-110);
+	left_motors.move(-78);
+	right_motors.move(-120);
 	pros::delay(800);
 	left_motors.move(0);
 	right_motors.move(0);
 
 	pros::delay(100);
+	left_motors.move(55);
+	right_motors.move(125);
+	pros::delay(400);
 	wings.set_value(1);
-	left_motors.move(70);
-	right_motors.move(120);
 	pros::delay(400);
 	wings.set_value(0);
-	pros::delay(700);
+	left_motors.move(75);
+	right_motors.move(75);
+	pros::delay(500);
 	left_motors.move(0);
 	right_motors.move(0);
-	
-	move_forward(15, -20, 20);
+	pros::delay(100);
+	// move_forward(15, -20, 20);
 }
 
 void opcontrol() {
