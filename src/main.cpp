@@ -41,7 +41,7 @@ void disabled()
 void competition_initialize() {
 	reset_inertial();
 }
-void autonomous() {
+void autonomous__() { // Auton far side
 
 
 	hold(32, 6);
