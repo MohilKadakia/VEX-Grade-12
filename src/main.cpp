@@ -44,8 +44,8 @@ void competition_initialize() {
 }
 
 void autonomous() { // Auton far (left) side
-	left_motors.move(-120);
-	right_motors.move(-78);
+	left_motors.move(78);
+	right_motors.move(120);
 	pros::delay(800);
 	left_motors.move(0);
 	right_motors.move(0);
