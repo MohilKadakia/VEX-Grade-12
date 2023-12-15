@@ -32,23 +32,6 @@ void disabled()
 void competition_initialize() {
 	//reset_inertial();
 }
-// void autonomous__() { // Auton far (left) side
-// 	left_motors.move(-110);
-// 	right_motors.move(-70);
-// 	pros::delay(1400);
-// 	left_motors.move(0);
-// 	right_motors.move(0);
-
-// 	pros::delay(100);
-// 	left_motors.move(110);
-// 	right_motors.move(40);
-// 	wings.set_value(1);
-// 	pros::delay(500);
-// 	wings.set_value(0);
-// 	pros::delay(1000);
-// 	left_motors.move(0);
-// 	right_motors.move(0);
-// }
 
 void autonomous() { // Auton near (right) side
 	left_motors.move(-78);
@@ -72,20 +55,23 @@ void autonomous() { // Auton near (right) side
 	pros::delay(100);
 	left_motors.move(-33);
 	right_motors.move(-33);
-	pros::delay(100);
+	pros::delay(300);
 	left_motors.move(0);
 	right_motors.move(0);
 	reset_inertial();
-	turn_left_to_look_at(-75);
-	master.clear();
-	while (ultrasonic.get_value() < 0 || ultrasonic.get_value() > 9000)
-	{
-		left_motors.move(20);
-		right_motors.move(20);
-		pros::delay(10);
-	}
-	
-	// move_forward(15, -20, 20);
+	turn_left_to_look_at(-85);
+	double average_inertial_start_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
+
+	while(ultrasonic.get_value() < 40 || ultrasonic.get_value() > 70) {
+        double current_inertial_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
+        double error = average_inertial_start_angle - current_inertial_angle;
+        double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
+
+        left_motors.move(std::clamp(20 + output, -20.0, 25.0));
+        right_motors.move(std::clamp(20 - output, -20.0, 25.0));
+    }
+	left_motors.move(0);
+	right_motors.move(0);
 }
 
 void opcontrol() {
