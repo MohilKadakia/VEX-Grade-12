@@ -20,6 +20,16 @@ void initialize()
 	//reset_inertial();
 }
 
+void hold(double holdValue, double holdTime, int delay){
+	double startTime = pros::millis();
+	double upperLimit = startTime+(holdTime*1000);
+	while (pros::millis() < upperLimit){
+		pros::lcd::set_text(0, std::to_string(std::clamp((upperLimit-(pros::millis()+((holdTime*1000)-delay)))/1000, 1.0, 127.0)*(holdValue)));
+		master.set_text(0 , 0, std::to_string(std::clamp((upperLimit-(pros::millis()+((holdTime*1000)-delay)))/1000, 1.0, 127.0)*(holdValue)));
+		catapult_motors.move(std::clamp((upperLimit-(pros::millis()+((holdTime*1000)-delay)))/1000, 1.0, 127.0)*(holdValue));
+	}
+}
+
 void disabled() 
 {
 	pros::lcd::clear();
