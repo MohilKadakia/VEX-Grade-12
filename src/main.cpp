@@ -58,8 +58,8 @@ void autonomous() { // Auton near (right) side
 	right_motors.move(0);
 
 	pros::delay(100);
-	left_motors.move(55);
-	right_motors.move(125);
+	left_motors.move(45);
+	right_motors.move(120);
 	pros::delay(400);
 	wings.set_value(1);
 	pros::delay(500);
@@ -70,6 +70,21 @@ void autonomous() { // Auton near (right) side
 	left_motors.move(0);
 	right_motors.move(0);
 	pros::delay(100);
+	left_motors.move(-33);
+	right_motors.move(-33);
+	pros::delay(100);
+	left_motors.move(0);
+	right_motors.move(0);
+	reset_inertial();
+	turn_left_to_look_at(-75);
+	master.clear();
+	while (ultrasonic.get_value() < 0 || ultrasonic.get_value() > 9000)
+	{
+		left_motors.move(20);
+		right_motors.move(20);
+		pros::delay(10);
+	}
+	
 	// move_forward(15, -20, 20);
 }
 
