@@ -44,42 +44,9 @@ void competition_initialize() {
 }
 
 void autonomous() { // Auton near (right) side
-	left_motors.move(-78);
-	right_motors.move(-120);
+	left_motors.move(-120);
+	right_motors.move(-78);
 	pros::delay(800);
-	left_motors.move(0);
-	right_motors.move(0);
-
-	pros::delay(100);
-	left_motors.move(45);
-	right_motors.move(120);
-	pros::delay(400);
-	wings.set_value(1);
-	pros::delay(500);
-	wings.set_value(0);
-	left_motors.move(127);
-	right_motors.move(50);
-	pros::delay(750);
-	left_motors.move(0);
-	right_motors.move(0);
-	pros::delay(100);
-	left_motors.move(-33);
-	right_motors.move(-33);
-	pros::delay(300);
-	left_motors.move(0);
-	right_motors.move(0);
-	reset_inertial();
-	turn_left_to_look_at(-85);
-	double average_inertial_start_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
-
-	while(ultrasonic.get_value() < 40 || ultrasonic.get_value() > 70) {
-        double current_inertial_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
-        double error = average_inertial_start_angle - current_inertial_angle;
-        double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
-
-        left_motors.move(std::clamp(20 + output, -20.0, 25.0));
-        right_motors.move(std::clamp(20 - output, -20.0, 25.0));
-    }
 	left_motors.move(0);
 	right_motors.move(0);
 }
