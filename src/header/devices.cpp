@@ -32,3 +32,5 @@ pros::IMU IMU[] = {PORT9, PORT10};
 // Pneumatics
 pros::ADIDigitalOut wings(PORTH);
 pros::ADIDigitalOut intake(PORTG);
+
+pros::ADIUltrasonic ultrasonic(PORTE, PORTF);

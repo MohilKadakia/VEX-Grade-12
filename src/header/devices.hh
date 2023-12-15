@@ -21,4 +21,5 @@ extern pros::Motor catapult_motor_2;
 extern pros::IMU IMU[];
 extern pros::ADIDigitalOut wings;
 extern pros::ADIDigitalOut intake;
+extern pros::ADIUltrasonic ultrasonic;
 #endif
