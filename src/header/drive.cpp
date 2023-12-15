@@ -2,7 +2,7 @@
 #include "controls.h"
 
 double move_multiple(double x) {
-	return -0.4 * cos((3.14159265/127.0)*x)+0.6;
+	return -0.3 * cos((3.14159265/127.0)*x)+0.5;
 }
 
 void drive_robot() {
