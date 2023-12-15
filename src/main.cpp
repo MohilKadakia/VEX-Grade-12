@@ -43,7 +43,7 @@ void competition_initialize() {
 	//reset_inertial();
 }
 
-void autonomous() { // Auton near (right) side
+void autonomous() { // Auton far (left) side
 	left_motors.move(-120);
 	right_motors.move(-78);
 	pros::delay(800);
