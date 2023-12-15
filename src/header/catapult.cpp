@@ -3,6 +3,7 @@
 #include "devices.hh"
 
 bool catapult_active = false;
+bool hold_active = false;
 
 void debug_values()
 {
@@ -20,17 +21,31 @@ void catapult_trigger()
 		if (master.get_digital(master_R2))
 		{
 			catapult_active = !catapult_active;
+			hold_active = false;
 			while(master.get_digital(master_R2)) {
 				pros::delay(10);
 			}
 		}
 		pros::delay(10);
+
+		if(master.get_digital(master_DOWN)) {
+			hold_active = !hold_active;
+			while(master.get_digital(master_DOWN)) {
+				pros::delay(10);
+			}
+		}
 	}
 }
 void handle_catapult()
 {
 	if (catapult_active)
 		catapult_motors.move(87);
-	else
+
+	if(hold_active) {
+		catapult_motors.move(44);
+	}
+
+	if(!catapult_active && !hold_active) {
 		catapult_motors.move(0);
+	}
 }
