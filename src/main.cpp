@@ -41,8 +41,8 @@ void autonomous() {
 	right_motors.move(0);
 
 	// align with wall
-	move_backward(37.0, -50.0, 50.0);
-	turn_right_to_look_at(72);
+	move_backward(40.0, -50.0, 50.0); // originally 37
+	turn_right_to_look_at(62); // original 72
 	move_backward(20.0, -70.0, 70.0);
 
 	// matchload and consistently touch roller
@@ -79,7 +79,7 @@ void autonomous() {
 	move_forward_inertial(110.0, -80.0, 100.0, 90.0);
 	wings.set_value(0);
 
-	left_motors.move(60);
+	left_motors.move(40);
 	right_motors.move(120);
 	pros::delay(2700);
 	left_motors.move(0);
@@ -91,8 +91,8 @@ void autonomous() {
 	// push triballs front of the net
 	move_backward(60.0, -40.0, 40.0);
 	turn_left_to_look_at(-140);
-	move_forward_inertial(300.0, -50.0, 80.0, 70.0);
-	turn_right_to_look_at(5);
+	move_forward_inertial(200.0, -50.0, 80.0, 70.0);
+	turn_right_to_look_at(-5);
 	wings.set_value(1);
 	move_forward_inertial(175.0, -50.0, 127.0, 110.0);
 	wings.set_value(0);
@@ -162,26 +162,20 @@ void autonomous() {
 	// right_motors.move(0);
 
 	// move_backward(70.0, -40.0, 40.0);
-	// move_forward_inertial(130.0, -50.0, 127.0, 110.0);
+	// move_forward_inertial(140.0, -50.0, 127.0, 110.0);
 
 	// // push triballs front of the net
 	// move_backward(60.0, -40.0, 40.0);
-	// turn_left_to_look_at(-110);
-	// move_forward_inertial(170.0, -50.0, 80.0, 70.0);
-	// turn_right_to_look_at(-10);
-
-	// wings.set_value(1);	
-	// left_motors.move(80);
-	// right_motors.move(127);
-	// pros::delay(2000);
-	// left_motors.move(0);
-	// right_motors.move(0);
-	// // move_forward_inertial(175.0, -50.0, 127.0, 110.0);
+	// turn_left_to_look_at(-140);
+	// move_forward_inertial(300.0, -50.0, 80.0, 70.0);
+	// turn_right_to_look_at(5);
+	// wings.set_value(1);
+	// move_forward_inertial(175.0, -50.0, 127.0, 110.0);
 	// wings.set_value(0);
 	// move_backward(50.0, -50.0, 80.0);
 	
 	// // push triballs left side front of net
-	// turn_left_to_look_at(-45);
+	// turn_left_to_look_at(-35);
 	// wings.set_value(1);
 	// left_motors.move(100);
 	// right_motors.move(80);
@@ -190,6 +184,7 @@ void autonomous() {
 	// right_motors.move(0);
 	// wings.set_value(0);
 	// move_backward(50.0, -80.0, 80.0);
+
 }
 
 void opcontrol() {
