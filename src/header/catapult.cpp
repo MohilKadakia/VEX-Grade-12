@@ -29,8 +29,16 @@ void catapult_trigger()
 }
 void handle_catapult()
 {
-	if (catapult_active)
+	if (catapult_active) {
 		catapult_motors.move(87);
+		pros::delay(500);
+		if(abs(catapult_motor_1.get_actual_velocity()) < 1) {
+			catapult_motors.move(0);
+			pros::delay(400);
+			catapult_motors.move(87);
+			pros::delay(1000);
+		}
+	}
 	else
 		catapult_motors.move(0);
 }
