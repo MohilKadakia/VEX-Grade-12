@@ -15,20 +15,20 @@ pros::Motor right_motor_1(PORT1, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_EN
 pros::Motor right_motor_2(PORT2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 
-// Motor Groups
+// Movement Motor Groups
 pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
 
-// Catapult Motor
-pros::Motor catapult_motor_1(PORT7, pros::E_MOTOR_GEAR_RED, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor catapult_motor_2(PORT8, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_ENCODER_DEGREES);
+// Add-on's
+pros::Motor kicker_motor_1(PORT7, pros::E_MOTOR_GEAR_RED, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor_Group kicker_motors({kicker_motor_1});
 
-// Catapult Motor Group
-pros::Motor_Group catapult_motors({catapult_motor_1, catapult_motor_2});
+pros::Motor intake_motor_1(PORT8, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor_Group intake_motors({intake_motor_1});
 
 // Inertial Sensors
 pros::IMU IMU[] = {PORT9, PORT10};
 
 // Pneumatics
-pros::ADIDigitalOut wings(PORTH);
-pros::ADIDigitalOut intake(PORTG);
+pros::ADIDigitalOut blocker(PORTF);
+pros::ADIDigitalOut wings(PORTG);
