@@ -2,13 +2,21 @@
 #include "devices.hh"
 #include "controls.h"
 
-bool intake_active = false;
+bool intake_active_in = false;
+bool intake_active_out = false;
 
 void intake_trigger() {
     while(true) {
         if (master.get_digital(master_L1)) {
-            intake_active = !intake_active;
+            intake_active_in = !intake_active_in;
             while (master.get_digital(master_L1)) {
+                pros::delay(10);
+            }
+        }
+
+        if (master.get_digital(master_R1)) {
+            intake_active_out = !intake_active_out;
+            while (master.get_digital(master_R1)) {
                 pros::delay(10);
             }
         }
@@ -17,12 +25,18 @@ void intake_trigger() {
 }
 
 void handle_intake() {
-    if (intake_active) {
-        intake.set_value(1);
-        pros::lcd::set_text(0, "working");
+    if (intake_active_in) {
+        intake_motors.move(100);
+        pros::lcd::set_text(0, "moving forward");
     }
+    
+    else if (intake_active_out) {
+        intake_motors.move(-100);
+        pros::lcd::set_text(0, "moving backwards");
+    }
+
     else {
-        intake.set_value(0);
-        pros::lcd::set_text(0, "Not Working");
+        intake_motors.move(0);
+        pros::lcd::set_text(0, "Not in action");
     }
 }

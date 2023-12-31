@@ -13,12 +13,14 @@ extern pros::Motor right_motor_3;
 
 extern pros::Motor_Group left_motors;
 extern pros::Motor_Group right_motors;
-extern pros::Motor_Group catapult_motors;
+extern pros::Motor_Group kicker_motors;
+extern pros::Motor_Group intake_motors;
 
-extern pros::Motor catapult_motor_1;
-extern pros::Motor catapult_motor_2;
+extern pros::Motor kicker_motor_1;
+extern pros::Motor intake_motor_1;
 
 extern pros::IMU IMU[];
 extern pros::ADIDigitalOut wings;
-extern pros::ADIDigitalOut intake;
+extern pros::ADIDigitalOut blocker;
+extern pros::ADIUltrasonic ultrasonic;
 #endif
