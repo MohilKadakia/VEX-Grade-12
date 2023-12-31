@@ -12,6 +12,7 @@
 #include "header/wings.hh"
 #include "header/auto.hh"
 #include "header/intake.hh"
+#include "header/blocker.hh"
 
 void initialize()
 {
@@ -89,10 +90,12 @@ void opcontrol() {
 	pros::Task kicker_task(kicker_trigger);
 	pros::Task wings_task(wings_trigger);
 	pros::Task intake_task(intake_trigger);
+	pros::Task blocker_task(blocker_trigger);
 	while (true) {
 		handle_kicker();
 		handle_wings();
 		handle_intake();
+		handle_blocker();
 		pros::delay(10);
 	}        
 }
