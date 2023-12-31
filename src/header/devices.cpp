@@ -24,7 +24,7 @@ pros::Motor kicker_motor_1(PORT7, pros::E_MOTOR_GEAR_RED, true, pros::E_MOTOR_EN
 pros::Motor_Group kicker_motors({kicker_motor_1});
 
 // Intake Motor
-pros::Motor intake_motor_1(PORT8, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor intake_motor_1(PORT8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor_Group intake_motors({intake_motor_1});
 
 // Sensors
