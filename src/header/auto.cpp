@@ -44,12 +44,11 @@ double get_distance_in_degrees(double distance_cm) {
 }
 
 void turn_right_to_look_at(double degrees) {
-    double average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
+    double average_inertial_degree = IMU[0].get_yaw();
     master.clear();
     while (fabs(degrees - average_inertial_degree) > 1) {
-        average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
-        // master.set_text(0,0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
-        pros::lcd::set_text(0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
+        average_inertial_degree = IMU[0].get_yaw();
+        pros::lcd::set_text(0, std::to_string(IMU[0].get_yaw()));
         pros::lcd::set_text(1, "Turning");
         double output = pid(degrees - average_inertial_degree, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
 
@@ -63,11 +62,11 @@ void turn_right_to_look_at(double degrees) {
 }
 
 void turn_right_to_look_at_TEST(double degrees) {
-    double average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw()) / 2.0;
+    double average_inertial_degree = IMU[0].get_yaw();
     master.clear();
 
     while (std::abs(degrees - average_inertial_degree) > 1.0) {
-        average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw()) / 2.0;
+        average_inertial_degree = IMU[0].get_yaw();
 
         double angle_difference = degrees - average_inertial_degree;
 
@@ -79,7 +78,6 @@ void turn_right_to_look_at_TEST(double degrees) {
         }
 
         pros::lcd::set_text(0, std::to_string(average_inertial_degree));
-        pros::lcd::set_text(1, "Turning");
 
         double output = pid(angle_difference, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
 
@@ -91,17 +89,16 @@ void turn_right_to_look_at_TEST(double degrees) {
 
     left_motors.move_velocity(0);
     right_motors.move_velocity(0);
-    pros::lcd::set_text(1, "Completed Turn");
 }
 
 void turn_left_to_look_at(double degrees) {
-    double average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
+    double average_inertial_degree = IMU[0].get_yaw();
     double left_motor_velocity = 0;
     double right_motor_velocity = 0;
     master.clear();
     while (fabs(degrees - average_inertial_degree) > 1) {
-        average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
-        pros::lcd::set_text(0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
+        average_inertial_degree = IMU[0].get_yaw();
+        pros::lcd::set_text(0, std::to_string(IMU[0].get_yaw()));
         pros::lcd::set_text(1, "Turning");
         double output = pid(degrees - average_inertial_degree, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
 
@@ -115,11 +112,11 @@ void turn_left_to_look_at(double degrees) {
 }
 
 void turn_left_to_look_at_TEST(double degrees) {
-    double average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw()) / 2.0;
+    double average_inertial_degree = IMU[0].get_yaw();
     master.clear();
 
     while (std::abs(degrees - average_inertial_degree) > 1.0) {
-        average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw()) / 2.0;
+        average_inertial_degree = IMU[0].get_yaw();
 
         double angle_difference = degrees - average_inertial_degree;
 
@@ -192,7 +189,7 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
     double distance_degrees = get_distance_in_degrees(distance_cm);
 
     // calculates base angle
-    double average_inertial_start_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
+    double average_inertial_start_angle = IMU[0].get_yaw();
 
     // the start and current position is the same
     double avg_start_rotation = get_avg_motor_position();
@@ -201,7 +198,7 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
     while(avg_current_rotation <= avg_start_rotation + distance_degrees) {
         avg_current_rotation =  get_avg_motor_position();
 
-        double current_inertial_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
+        double current_inertial_angle = IMU[0].get_yaw(); 
         double error = average_inertial_start_angle - current_inertial_angle;
         double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 
@@ -217,7 +214,7 @@ void move_forward_inertial_pid(double distance_cm, double lowest_base_speed, dou
     double distance_degrees = get_distance_in_degrees(distance_cm);
 
     // calculates base angle
-    double average_inertial_start_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
+    double average_inertial_start_angle = IMU[0].get_yaw();
 
     // the start and current position is the same
     double avg_start_rotation = get_avg_motor_position();
@@ -226,7 +223,7 @@ void move_forward_inertial_pid(double distance_cm, double lowest_base_speed, dou
     while(avg_current_rotation <= avg_start_rotation + distance_degrees) {
         avg_current_rotation =  get_avg_motor_position();
 
-        double current_inertial_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
+        double current_inertial_angle = IMU[0].get_yaw(); 
         double inertial_error = average_inertial_start_angle - current_inertial_angle;
         double inertial_speed_output = pid(inertial_error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 
@@ -245,7 +242,7 @@ void move_backward_inertial_pid(double distance_cm, double lowest_base_speed, do
     double distance_degrees = get_distance_in_degrees(distance_cm);
 
     // calculates base angle
-    double average_inertial_start_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
+    double average_inertial_start_angle = IMU[0].get_yaw();
 
     // the start and current position is the same
     double avg_start_rotation = get_avg_motor_position();
@@ -254,7 +251,7 @@ void move_backward_inertial_pid(double distance_cm, double lowest_base_speed, do
     while(avg_current_rotation > avg_start_rotation - distance_degrees) {
         avg_current_rotation =  get_avg_motor_position();
 
-        double current_inertial_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
+        double current_inertial_angle = IMU[0].get_yaw(); 
         double inertial_error = average_inertial_start_angle - current_inertial_angle;
         double inertial_speed_output = pid(inertial_error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 
