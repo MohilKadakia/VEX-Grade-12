@@ -26,8 +26,10 @@ pros::Motor_Group kicker_motors({kicker_motor_1});
 pros::Motor intake_motor_1(PORT8, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor_Group intake_motors({intake_motor_1});
 
-// Inertial Sensors
-pros::IMU IMU[] = {PORT9, PORT10};
+// Sensors
+pros::IMU IMU[] = {PORT9};
+pros::Optical optical_sensor(PORT10);
+pros::ADIUltrasonic ultrasonic(PORT11, PORT12);
 
 // Pneumatics
 pros::ADIDigitalOut blocker(PORTF);
