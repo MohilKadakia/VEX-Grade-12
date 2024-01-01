@@ -89,7 +89,6 @@ void opcontrol() {
 	pros::Task drive_task(drive_robot);
 	pros::Task kicker_task(kicker_trigger);
 	pros::Task wings_task(wings_trigger);
-	pros::Task intake_task(intake_trigger);
 	pros::Task blocker_task(blocker_trigger);
 	while (true) {
 		handle_kicker();

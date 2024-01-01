@@ -16,11 +16,11 @@ void debug_values() {
 
 void kicker_trigger() {	
 	while(true) {
-		if (master.get_digital(master_R2))
+		if (master.get_digital(master_B))
 		{
 			kicker_active = !kicker_active;
 			// hold_active = false;
-			while(master.get_digital(master_R2)) {
+			while(master.get_digital(master_B)) {
 				pros::delay(10);
 			}
 		}
