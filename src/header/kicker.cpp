@@ -3,7 +3,6 @@
 #include "devices.hh"
 
 bool kicker_active = false;
-// bool hold_active = false;
 
 void debug_values() {
 	pros::lcd::set_text(0, "Displacement: LMtop:" + std::to_string(left_motor_1.get_encoder_units()) + " LMfro" + std::to_string(left_motor_2.get_encoder_units()) + " LMbac" + std::to_string(left_motor_3.get_encoder_units()));

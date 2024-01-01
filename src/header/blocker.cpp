@@ -6,9 +6,9 @@ bool blocker_active = false;
 
 void blocker_trigger() {
     while(true) {
-        if (master.get_digital(master_A)) {
+        if (master.get_digital(master_DOWN)) {
             blocker_active = !blocker_active;
-            while (master.get_digital(master_A)) {
+            while (master.get_digital(master_DOWN)) {
                 pros::delay(10);
             }
         }
