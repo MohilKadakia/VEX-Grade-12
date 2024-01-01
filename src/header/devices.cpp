@@ -28,9 +28,9 @@ pros::Motor intake_motor_1(PORT8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_
 pros::Motor_Group intake_motors({intake_motor_1});
 
 // Sensors
-pros::IMU IMU[] = {PORT9, PORT10};
-pros::Optical optical_sensor(PORT11);
-pros::ADIUltrasonic ultrasonic(PORT12, PORT13);
+pros::IMU IMU[] = {PORT9};
+pros::Optical optical_sensor(PORT10);
+pros::ADIUltrasonic ultrasonic(PORT11, PORT12);
 
 // Pneumatics
 pros::ADIDigitalOut blocker(PORTF);
