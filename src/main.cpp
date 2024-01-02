@@ -3,6 +3,7 @@
 #include <string>
 #include <cmath>
 
+#include "autoSelect/selection.h"
 #include "header/kicker.hh"
 #include "header/controls.h"
 #include "header/devices.hh"
@@ -14,8 +15,8 @@
 #include "header/intake.hh"
 #include "header/blocker.hh"
 
-void initialize()
-{
+void initialize() {
+	selector::init();
 	// pros::lcd::initialize();
 	// pros::lcd::set_text(0, "Inititalizing v1");
 	//reset_inertial();
@@ -45,11 +46,40 @@ void competition_initialize() {
 }
 
 void autonomous() { // Testing for new auton functions
-	turn_right_to_look_at_TEST(200);
 
-	turn_left_to_look_at_TEST(90);
+	if (selector::auton == 1) { 
+		pros::lcd::set_text(0, "Auton for Red Side Right");
+	}
 
-	move_forward_inertial_pid(100.0, -100.0, 100.0);
+	else if (selector::auton == 2) {
+		pros::lcd::set_text(0, "Auton for Red Side Left");
+	}
+
+	else if (selector::auton == 3) {
+		pros::lcd::set_text(0, "Test (Red)");
+		turn_right_to_look_at_TEST(200);
+		turn_left_to_look_at_TEST(90);
+		move_forward_inertial_pid(100.0, -100.0, 100.0);
+	}
+
+	else if (selector::auton == -1) {
+		pros::lcd::set_text(0, "Auton for Blue Side Right");
+	}
+
+	else if (selector::auton == -2) {
+		pros::lcd::set_text(0, "Auton for Blue Side Left");
+	}
+
+	else if (selector::auton == -3) {
+		pros::lcd::set_text(0, "Test (Blue)");
+		turn_right_to_look_at_TEST(200);
+		turn_left_to_look_at_TEST(90);
+		move_forward_inertial_pid(100.0, -100.0, 100.0);		
+	}
+
+	else if (selector::auton == 0) {
+		pros::lcd::set_text(0, "Auton for Skills");
+	}
 }
 
 void opcontrol() {
