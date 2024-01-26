@@ -15,11 +15,9 @@
 #include "header/intake.hh"
 #include "header/blocker.hh"
 
+
 void initialize() {
 	selector::init();
-	// pros::lcd::initialize();
-	// pros::lcd::set_text(0, "Inititalizing v1");
-	//reset_inertial();
 }
 
 void hold(double holdValue, double holdTime, int delay){
