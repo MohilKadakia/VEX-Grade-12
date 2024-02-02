@@ -18,6 +18,7 @@
 
 void initialize() {
 	selector::init();
+	pros::lcd::initialize();
 }
 
 void hold(double holdValue, double holdTime, int delay){
@@ -44,11 +45,16 @@ void competition_initialize() {
 }
 
 void autonomous() { // Testing for new auton functions
-
 	if (selector::auton == 1) { 
 		pros::lcd::set_text(0, "Auton for Red Side Right");
-	}
-
+		reset_inertial();
+		while (true) {
+			pros::c::imu_accel_s_t accel = IMU[0].get_accel();
+			pros::lcd::set_text(1, std::to_string(accel.x));
+			pros::lcd::set_text(2, std::to_string(accel.y));
+			pros::delay(20);		
+		}
+	}	
 	else if (selector::auton == 2) {
 		pros::lcd::set_text(0, "Auton for Red Side Left");
 	}

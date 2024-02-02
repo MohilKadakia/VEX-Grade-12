@@ -21,5 +21,4 @@ double pid(double error, double* pe, double* in, double kp, double ki, double kd
 void reset_inertial()
 {
     IMU[0].reset(true);
-    IMU[1].reset(true);
 }
