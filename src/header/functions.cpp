@@ -18,8 +18,19 @@ double pid(double error, double* pe, double* in, double kp, double ki, double kd
     return speed;
 }
 
+void VeloNDispViaAccel(double* velox, double* veloy, double* veloz, double* dispx, double* dispy, double* dispz, double* pt ){
+    double dt = (double) pros::millis()/1000 - *pt;
+    *velox += IMU.get_accel().x*dt;
+    *veloy += IMU.get_accel().y*dt;
+    *veloz += IMU.get_accel().z*dt;
+    *dispx += *velox*dt;
+    *dispy += *veloy*dt;
+    *dispz += *veloz*dt;
+    *pt = (double) pros::millis()/1000;
+		pros::lcd::set_text(0, std::to_string(dt));
+
+}
 void reset_inertial()
 {
-    IMU[0].reset(true);
-    IMU[1].reset(true);
+    IMU.reset(true);
 }

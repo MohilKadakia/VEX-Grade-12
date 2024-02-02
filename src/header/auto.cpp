@@ -11,46 +11,46 @@ double integral_turn = 0;
 double previous_error_turn = 0;
 
 double change_numbers(double value){
-    if (std::round(value) < 0){
-        return value+360;
-    }
-    return value;
+    // if (std::round(value) < 0){
+    //     return value+360;
+    // }
+    // return value;
 }
 
 void turn(double degree) {
-    double avgInertialYaw = 0;
-    bool buffer_period_active = false;
-    master.clear();
-    pros::lcd::set_text(0, "Has entered the turn" + std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
+    // double avgInertialYaw = 0;
+    // bool buffer_period_active = false;
+    // master.clear();
+    // pros::lcd::set_text(0, "Has entered the turn" + std::to_string((IMU.get_yaw()));
 
-    while (fabs(degree-avgInertialYaw)>1){
-        avgInertialYaw = (change_numbers(IMU[0].get_yaw())+change_numbers(IMU[1].get_yaw()))/2;
-        // master.set_text(0,0,std::to_string(buffer_period_active) + " " + std::to_string(IMU[0].get_yaw()) + " " + std::to_string(IMU[1].get_yaw()));
-        // master.set_text(0,0,"This is currently at turning" + std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
-        pros::lcd::set_text(1, "This is currently turning at" + std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
+    // while (fabs(degree-avgInertialYaw)>1){
+    //     avgInertialYaw = (change_numbers(IMU.get_yaw())+change_numbers(IMU.get_yaw()))/2;
+    //     // master.set_text(0,0,std::to_string(buffer_period_active) + " " + std::to_string(IMU.get_yaw()) + " " + std::to_string(IMU.get_yaw()));
+    //     // master.set_text(0,0,"This is currently at turning" + std::to_string((IMU.get_yaw()));
+    //     pros::lcd::set_text(1, "This is currently turning at" + std::to_string((IMU.get_yaw()));
 
-        pros::lcd::set_text(0, std::to_string((int) round(avgInertialYaw))+ " " + std::to_string(buffer_period_active));
-        pros::lcd::set_text(1, "Turning");
-        double output = pid(degree-avgInertialYaw, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
-        left_motors.move_velocity(output);
-        right_motors.move_velocity(-output);
-        pros::delay(20);
-    }
-    int bufferTime = pros::millis()+3000;
-    while(pros::millis() < bufferTime) {
-        buffer_period_active = true;
-        avgInertialYaw = (change_numbers(IMU[0].get_yaw())+change_numbers(IMU[1].get_yaw()))/2;
-        master.set_text(0,0,std::to_string(buffer_period_active) + " " + std::to_string(IMU[0].get_yaw()) + " " + std::to_string(IMU[1].get_yaw()));
-        pros::lcd::set_text(0, std::to_string((int) round(avgInertialYaw))+ " " + std::to_string(buffer_period_active));
-        double output = pid(degree-avgInertialYaw, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
-        left_motors.move_velocity(output);
-        right_motors.move_velocity(-output);
-        pros::delay(20);
-    }
-    left_motors.move_velocity(0);
-	right_motors.move_velocity(0);
-    buffer_period_active = false;
-    pros::lcd::set_text(1, "Completed Turn");
+    //     pros::lcd::set_text(0, std::to_string((int) round(avgInertialYaw))+ " " + std::to_string(buffer_period_active));
+    //     pros::lcd::set_text(1, "Turning");
+    //     double output = pid(degree-avgInertialYaw, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
+    //     left_motors.move_velocity(output);
+    //     right_motors.move_velocity(-output);
+    //     pros::delay(20);
+    // }
+    // int bufferTime = pros::millis()+3000;
+    // while(pros::millis() < bufferTime) {
+    //     buffer_period_active = true;
+    //     avgInertialYaw = (change_numbers(IMU.get_yaw())+change_numbers(IMU.get_yaw()))/2;
+    //     master.set_text(0,0,std::to_string(buffer_period_active) + " " + std::to_string(IMU.get_yaw()) + " " + std::to_string(IMU.get_yaw()));
+    //     pros::lcd::set_text(0, std::to_string((int) round(avgInertialYaw))+ " " + std::to_string(buffer_period_active));
+    //     double output = pid(degree-avgInertialYaw, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
+    //     left_motors.move_velocity(output);
+    //     right_motors.move_velocity(-output);
+    //     pros::delay(20);
+    // }
+    // left_motors.move_velocity(0);
+	// right_motors.move_velocity(0);
+    // buffer_period_active = false;
+    // pros::lcd::set_text(1, "Completed Turn");
 }
 
 void move(double cm) {
@@ -86,52 +86,52 @@ void move(double cm) {
 }
 
 void turn_right_to_look_at(double degrees) {
-    double average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
-    master.clear();
-    while (fabs(degrees - average_inertial_degree) > 1) {
-        average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
-        // master.set_text(0,0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
-        pros::lcd::set_text(0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
-        pros::lcd::set_text(1, "Turning");
-        double output = pid(degrees - average_inertial_degree, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
-        master.set_text(0,0, std::to_string(average_inertial_degree));
-        // left_motors.move_velocity(-output);
-        // right_motors.move_velocity(output);
+    // double average_inertial_degree = IMU.get_yaw();
+    // master.clear();
+    // while (fabs(degrees - average_inertial_degree) > 1) {
+    //     average_inertial_degree = IMU.get_yaw();
+    //     // master.set_text(0,0, std::to_string((IMU.get_yaw()));
+    //     pros::lcd::set_text(0, std::to_string((IMU.get_yaw()));
+    //     pros::lcd::set_text(1, "Turning");
+    //     double output = pid(degrees - average_inertial_degree, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
+    //     master.set_text(0,0, std::to_string(average_inertial_degree));
+    //     // left_motors.move_velocity(-output);
+    //     // right_motors.move_velocity(output);
 
-        left_motors.move_velocity(fabs((std::clamp(output, -90.0, 90.0))));
-        right_motors.move_velocity(-fabs(std::clamp(output, -90.0, 90.0)));
-        pros::delay(20);
-    }
-    left_motors.move_velocity(0);
-	right_motors.move_velocity(0);
-    pros::lcd::set_text(1, "Completed Turn");
-    // master.set_text(0,0, ("Final deg:" + std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2)));
+    //     left_motors.move_velocity(fabs((std::clamp(output, -90.0, 90.0))));
+    //     right_motors.move_velocity(-fabs(std::clamp(output, -90.0, 90.0)));
+    //     pros::delay(20);
+    // }
+    // left_motors.move_velocity(0);
+	// right_motors.move_velocity(0);
+    // pros::lcd::set_text(1, "Completed Turn");
+    // // master.set_text(0,0, ("Final deg:" + std::to_string((IMU.get_yaw())));
 }
 
 void turn_left_to_look_at(double degrees)
 {
-    double average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
-    double left_motor_velocity = 0;
-    double right_motor_velocity = 0;
-    master.clear();
-    while (fabs(degrees - average_inertial_degree) > 1) {
-        average_inertial_degree = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
-        // master.set_text(0,0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
-        pros::lcd::set_text(0, std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2));
-        pros::lcd::set_text(1, "Turning");
-        double output = pid(degrees - average_inertial_degree, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
-        master.set_text(0,0, std::to_string(average_inertial_degree));
-        // left_motors.move_velocity(-output);
-        // right_motors.move_velocity(output);
+    // double average_inertial_degree = IMU.get_yaw();
+    // double left_motor_velocity = 0;
+    // double right_motor_velocity = 0;
+    // master.clear();
+    // while (fabs(degrees - average_inertial_degree) > 1) {
+    //     average_inertial_degree = IMU.get_yaw();
+    //     // master.set_text(0,0, std::to_string((IMU.get_yaw()));
+    //     pros::lcd::set_text(0, std::to_string((IMU.get_yaw()));
+    //     pros::lcd::set_text(1, "Turning");
+    //     double output = pid(degrees - average_inertial_degree, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
+    //     master.set_text(0,0, std::to_string(average_inertial_degree));
+    //     // left_motors.move_velocity(-output);
+    //     // right_motors.move_velocity(output);
 
-        left_motors.move_velocity(-fabs((std::clamp(output, -90.0, 90.0))));
-        right_motors.move_velocity(fabs(std::clamp(output, -90.0, 90.0)));
-        pros::delay(20);
-    }
-    left_motors.move_velocity(0);
-	right_motors.move_velocity(0);
-    pros::lcd::set_text(1, "Completed Turn");
-    master.set_text(0,0, ("Final deg:" + std::to_string((IMU[0].get_yaw() + IMU[1].get_yaw()) / 2)));
+    //     left_motors.move_velocity(-fabs((std::clamp(output, -90.0, 90.0))));
+    //     right_motors.move_velocity(fabs(std::clamp(output, -90.0, 90.0)));
+    //     pros::delay(20);
+    // }
+    // left_motors.move_velocity(0);
+	// right_motors.move_velocity(0);
+    // pros::lcd::set_text(1, "Completed Turn");
+    // master.set_text(0,0, ("Final deg:" + std::to_string((IMU.get_yaw())));
 }
 
 void move_backward(double distance_cm, double lowest_speed, double fastest_speed) {
@@ -233,7 +233,7 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
     double wheel_circumfrence = 2 * 3.14159265 * 4; 
     double distance_degrees = (360 * distance_cm) / wheel_circumfrence;
 
-    double average_inertial_start_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2;
+    double average_inertial_start_angle = IMU.get_yaw();
 
     // inits variables to calculate average motor positions
     double avg_start_rotation_left = 0;
@@ -265,7 +265,7 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
         avg_right_current_rotation /= 3;
         avg_current_rotation =  (avg_left_current_rotation + avg_right_current_rotation) / 2;
 
-        double current_inertial_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
+        double current_inertial_angle = IMU.get_yaw(); 
         double error = average_inertial_start_angle - current_inertial_angle;
         double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 

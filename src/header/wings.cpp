@@ -6,9 +6,9 @@ bool wings_active = false;
 
 void wings_trigger() {
     while(true) {
-        if (master.get_digital(master_L2)) {
+        if (master.get_digital(master_L1) || master.get_digital(master_R1)) {
             wings_active = !wings_active;
-            while (master.get_digital(master_L2)) {
+            while (master.get_digital(master_L1) || master.get_digital(master_R1)) {
                 pros::delay(10);
             }
         }
@@ -19,10 +19,8 @@ void wings_trigger() {
 void handle_wings() {
     if (wings_active) {
         wings.set_value(1);
-        pros::lcd::set_text(0, "working");
     }
     else {
         wings.set_value(0);
-        pros::lcd::set_text(0, "Not Working");
     }
 }

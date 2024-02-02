@@ -2,32 +2,29 @@
 
 #include <string>
 #include <cmath>
-
-#include "header/catapult.hh"
+// #include "gif-pros/gifclass.hpp"
+#include "header/puncher.hh"
 #include "header/controls.h"
 #include "header/devices.hh"
 #include "header/drive.hh"
 #include "header/functions.hh"
 #include "header/ports.h"
 #include "header/wings.hh"
-#include "header/auto.hh"
+// #include "header/auto.hh"
 #include "header/intake.hh"
-
+#include "header/hang.hh"
+double velox = 0;
+double veloy = 0;
+double veloz = 0;
+double dispx = 0;
+double dispy = 0;
+double dispz = 0;
+double pt = pros::millis();
 void initialize()
 {
-	// pros::lcd::initialize();
-	// pros::lcd::set_text(0, "Inititalizing v1");
-	//reset_inertial();
-}
+	IMU.reset(true);
+	pros::lcd::initialize();
 
-void hold(double holdValue, double holdTime, int delay){
-	double startTime = pros::millis();
-	double upperLimit = startTime+(holdTime*1000);
-	while (pros::millis() < upperLimit){
-		pros::lcd::set_text(0, std::to_string(std::clamp((upperLimit-(pros::millis()+((holdTime*1000)-delay)))/1000, 1.0, 127.0)*(holdValue)));
-		master.set_text(0 , 0, std::to_string(std::clamp((upperLimit-(pros::millis()+((holdTime*1000)-delay)))/1000, 1.0, 127.0)*(holdValue)));
-		catapult_motors.move(std::clamp((upperLimit-(pros::millis()+((holdTime*1000)-delay)))/1000, 1.0, 127.0)*(holdValue));
-	}
 }
 
 void disabled() 
@@ -44,55 +41,65 @@ void competition_initialize() {
 }
 
 void autonomous() { // Auton near (right) side
-	left_motors.move(-78);
-	right_motors.move(-120);
-	pros::delay(800);
-	left_motors.move(0);
-	right_motors.move(0);
+	// left_motors.move(-78);
+	// right_motors.move(-120);
+	// pros::delay(766);
+	// left_motors.move(0);
+	// right_motors.move(0);
 
-	pros::delay(100);
-	left_motors.move(45);
-	right_motors.move(120);
-	pros::delay(400);
-	wings.set_value(1);
-	pros::delay(500);
-	wings.set_value(0);
-	left_motors.move(127);
-	right_motors.move(50);
-	pros::delay(750);
-	left_motors.move(0);
-	right_motors.move(0);
-	pros::delay(100);
-	left_motors.move(-33);
-	right_motors.move(-33);
-	pros::delay(300);
-	left_motors.move(0);
-	right_motors.move(0);
-	reset_inertial();
-	turn_left_to_look_at(-85);
-	double average_inertial_start_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
+	// pros::delay(100);
+	// left_motors.move(45);
+	// right_motors.move(120);
+	// pros::delay(400);
+	// wings.set_value(1);
+	// pros::delay(500);
+	// wings.set_value(0);
+	// left_motors.move(127);
+	// right_motors.move(50);
+	// pros::delay(750);
+	// left_motors.move(0);
+	// right_motors.move(0);
+	// pros::delay(100);
+	// left_motors.move(-33);
+	// right_motors.move(-33);
+	// pros::delay(300);
+	// left_motors.move(0);
+	// right_motors.move(0);
+	// reset_inertial();
+	// turn_left_to_look_at(-85);
+	// double average_inertial_start_angle = IMU.get_yaw();
 
-	while(ultrasonic.get_value() < 40 || ultrasonic.get_value() > 70) {
-        double current_inertial_angle = (IMU[0].get_yaw() + IMU[1].get_yaw())/2; 
-        double error = average_inertial_start_angle - current_inertial_angle;
-        double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
+	// while(ultrasonic.get_value() < 40 || ultrasonic.get_value() > 70) {
+    //     double current_inertial_angle = IMU.get_yaw(); 
+    //     double error = average_inertial_start_angle - current_inertial_angle;
+    //     double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 
-        left_motors.move(std::clamp(20 + output, -20.0, 25.0));
-        right_motors.move(std::clamp(20 - output, -20.0, 25.0));
-    }
-	left_motors.move(0);
-	right_motors.move(0);
+    //     left_motors.move(std::clamp(20 + output, -20.0, 25.0));
+    //     right_motors.move(std::clamp(20 - output, -20.0, 25.0));
+    // }
+	// left_motors.move(0);
+	// right_motors.move(0);
 }
 
 void opcontrol() {
-	pros::Task drive_task(drive_robot);
-	pros::Task catapult_task(catapult_trigger);
-	pros::Task wings_task(wings_trigger);
-	pros::Task intake_task(intake_trigger);
+	// pros::Task catapult_task(puncher_trigger);
+	// pros::Task wings_task(wings_trigger);
+	// pros::Task hang_task(hang_trigger);
 	while (true) {
-		handle_catapult();
-		handle_wings();
-		handle_intake();
-		pros::delay(10);
+		// intake();
+		// drive_robot();
+		// handle_puncher();
+		// handle_wings();
+		// handle_hang();
+		VeloNDispViaAccel(&velox, &veloy, &veloz, &dispx, &dispy, &dispz, &pt);
+		pros::lcd::set_text(1, std::to_string(velox));
+		// pros::lcd::set_text(1, std::to_string(IMU.get_accel().x));
+		// pros::lcd::set_text(2, std::to_string( (double) pros::millis()) );
+		// pros::lcd::set_text(3, std::to_string(pt));
+		// pros::lcd::set_text(2, std::to_string(veloz));
+		// pros::lcd::set_text(3, std::to_string(dispx));
+		// pros::lcd::set_text(4, std::to_string(dispy));
+		// pros::lcd::set_text(5, std::to_string(dispz));
+		pros::delay(20);
 	}        
 }

@@ -19,18 +19,18 @@ pros::Motor right_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_E
 pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
 
-// Catapult Motor
-pros::Motor catapult_motor_1(PORT7, pros::E_MOTOR_GEAR_RED, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor catapult_motor_2(PORT8, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_ENCODER_DEGREES);
+// Puncher Motor
+pros::Motor puncher_motor(PORT7, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_ENCODER_DEGREES);
 
-// Catapult Motor Group
-pros::Motor_Group catapult_motors({catapult_motor_1, catapult_motor_2});
+//Intake Motor
+pros::Motor intake_motor(PORT8, pros::E_MOTOR_GEAR_GREEN,  true, pros::E_MOTOR_ENCODER_DEGREES);
 
 // Inertial Sensors
-pros::IMU IMU[] = {PORT9, PORT10};
+pros::IMU IMU = PORT9;
 
 // Pneumatics
 pros::ADIDigitalOut wings(PORTH);
-pros::ADIDigitalOut intake(PORTG);
+pros::ADIDigitalOut hang(PORTG);
 
+//Ultrasonic Sensor
 pros::ADIUltrasonic ultrasonic(PORTE, PORTF);
