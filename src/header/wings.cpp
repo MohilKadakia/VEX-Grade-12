@@ -17,10 +17,14 @@ void wings_trigger() {
 }
 
 void handle_wings() {
-    if (wings_active) {
+    while ((master.get_digital(master_L2)) || (master.get_digital(master_R2))) {
         wings.set_value(1);
+        pros::delay(100);
     }
-    else {
+
+
+    if (!(master.get_digital(master_R2) && master.get_digital(master_L2))) {
         wings.set_value(0);
+        pros::delay(100);
     }
 }

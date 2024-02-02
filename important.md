@@ -26,7 +26,7 @@ Button L2 - Toggle Wings
 
 Button R1 - 
 
-Button R2 - Toggle Catapult
+Button R2 - Toggle kicker
 
 <br><br>
 
@@ -47,7 +47,7 @@ PORT5 - Front Motor
 PORT6 - Back Motor
 
 ## Other Motors
-PORT7 - Catapult Motor
+PORT7 - kicker Motor
 
 PORT8 - Intake Motor
 
@@ -74,9 +74,9 @@ PORT 5 - Movement Right Front Motor
 
 PORT 6 - Movement Right Back Motor
 
-PORT 7 - Catapult Motor 1
+PORT 7 - kicker Motor 1
 
-PORT 8 - Catapult Motor 2
+PORT 8 - kicker Motor 2
 
 PORT 9 - IMU Sensor ?
 

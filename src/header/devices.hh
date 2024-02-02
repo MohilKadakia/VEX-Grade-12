@@ -16,9 +16,14 @@ extern pros::Motor_Group right_motors;
 extern pros::Motor puncher_motor;
 extern pros::Motor intake_motor;
 
+extern pros::Motor_Group kicker_motors;
+extern pros::Motor_Group intake_motors;
+
+extern pros::Motor kicker_motor_1;
+extern pros::Motor intake_motor_1;
 
 extern pros::IMU IMU;
 extern pros::ADIDigitalOut wings;
-extern pros::ADIDigitalOut hang;
+extern pros::ADIDigitalOut blocker;
 extern pros::ADIUltrasonic ultrasonic;
 #endif

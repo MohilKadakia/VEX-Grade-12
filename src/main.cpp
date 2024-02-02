@@ -2,8 +2,8 @@
 
 #include <string>
 #include <cmath>
-// #include "gif-pros/gifclass.hpp"
-#include "header/puncher.hh"
+
+#include "header/kicker.hh"
 #include "header/controls.h"
 #include "header/devices.hh"
 #include "header/drive.hh"
@@ -20,11 +20,22 @@ double dispx = 0;
 double dispy = 0;
 double dispz = 0;
 double pt = pros::millis();
+#include "header/blocker.hh"
+
 void initialize()
 {
 	IMU.reset(true);
 	pros::lcd::initialize();
+}
 
+void hold(double holdValue, double holdTime, int delay){
+	double startTime = pros::millis();
+	double upperLimit = startTime+(holdTime*1000);
+	while (pros::millis() < upperLimit){
+		pros::lcd::set_text(0, std::to_string(std::clamp((upperLimit-(pros::millis()+((holdTime*1000)-delay)))/1000, 1.0, 127.0)*(holdValue)));
+		master.set_text(0 , 0, std::to_string(std::clamp((upperLimit-(pros::millis()+((holdTime*1000)-delay)))/1000, 1.0, 127.0)*(holdValue)));
+		kicker_motors.move(std::clamp((upperLimit-(pros::millis()+((holdTime*1000)-delay)))/1000, 1.0, 127.0)*(holdValue));
+	}
 }
 
 void disabled() 
@@ -82,24 +93,14 @@ void autonomous() { // Auton near (right) side
 }
 
 void opcontrol() {
-	// pros::Task catapult_task(puncher_trigger);
-	// pros::Task wings_task(wings_trigger);
-	// pros::Task hang_task(hang_trigger);
+	pros::Task drive_task(drive_robot);
+	pros::Task kicker_task(kicker_trigger);
+	pros::Task blocker_task(blocker_trigger);
 	while (true) {
-		// intake();
-		// drive_robot();
-		// handle_puncher();
-		// handle_wings();
-		// handle_hang();
-		VeloNDispViaAccel(&velox, &veloy, &veloz, &dispx, &dispy, &dispz, &pt);
-		pros::lcd::set_text(1, std::to_string(velox));
-		// pros::lcd::set_text(1, std::to_string(IMU.get_accel().x));
-		// pros::lcd::set_text(2, std::to_string( (double) pros::millis()) );
-		// pros::lcd::set_text(3, std::to_string(pt));
-		// pros::lcd::set_text(2, std::to_string(veloz));
-		// pros::lcd::set_text(3, std::to_string(dispx));
-		// pros::lcd::set_text(4, std::to_string(dispy));
-		// pros::lcd::set_text(5, std::to_string(dispz));
-		pros::delay(20);
+		handle_kicker();
+		handle_wings();
+		handle_intake();
+		handle_blocker();
+		pros::delay(10);
 	}        
 }
