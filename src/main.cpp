@@ -10,7 +10,7 @@
 #include "header/functions.hh"
 #include "header/ports.h"
 #include "header/wings.hh"
-// #include "header/auto.hh"
+#include "header/auto.hh"
 #include "header/intake.hh"
 #include "header/hang.hh"
 double velox = 0;
@@ -20,7 +20,6 @@ double dispx = 0;
 double dispy = 0;
 double dispz = 0;
 double pt = pros::millis();
-#include "header/blocker.hh"
 
 void initialize()
 {
@@ -51,7 +50,9 @@ void competition_initialize() {
 	//reset_inertial();
 }
 
-void autonomous() { // Auton near (right) side
+void autonomous() { 
+	turn_left_to_look_at(90);
+	// Auton near (right) side
 	// left_motors.move(-78);
 	// right_motors.move(-120);
 	// pros::delay(766);
@@ -95,12 +96,11 @@ void autonomous() { // Auton near (right) side
 void opcontrol() {
 	pros::Task drive_task(drive_robot);
 	pros::Task kicker_task(kicker_trigger);
-	pros::Task blocker_task(blocker_trigger);
 	while (true) {
 		handle_kicker();
 		handle_wings();
 		handle_intake();
-		handle_blocker();
+		handle_hang();
 		pros::delay(10);
 	}        
 }

@@ -24,6 +24,6 @@ extern pros::Motor intake_motor_1;
 
 extern pros::IMU IMU;
 extern pros::ADIDigitalOut wings;
-extern pros::ADIDigitalOut blocker;
+extern pros::ADIDigitalOut hang;
 extern pros::ADIUltrasonic ultrasonic;
 #endif

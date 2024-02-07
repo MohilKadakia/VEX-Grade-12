@@ -21,8 +21,10 @@ void puncher_trigger()
 		{
 			puncher_active = !puncher_active;
 			while(master.get_digital(master_A)) {
-	pros::lcd::set_text(4, "Yaw: ISfro" + std::to_string(IMU[0].get_yaw()) + "ISbac" + std::to_string(IMU[1].get_yaw()));
-	pros::lcd::set_text(5, "Kicker: " + std::to_string(kicker_active));
+				pros::delay(10);
+			}
+		}
+	}
 }
 
 void kicker_trigger() {	

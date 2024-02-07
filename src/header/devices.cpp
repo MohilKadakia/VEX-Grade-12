@@ -33,5 +33,5 @@ pros::Optical optical_sensor(PORT10);
 pros::ADIUltrasonic ultrasonic(PORT11, PORT12);
 
 // Pneumatics
-pros::ADIDigitalOut blocker(PORTF);
+pros::ADIDigitalOut hang(PORTF);
 pros::ADIDigitalOut wings(PORTG);
