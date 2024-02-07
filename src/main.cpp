@@ -13,6 +13,7 @@
 #include "header/auto.hh"
 #include "header/intake.hh"
 #include "header/hang.hh"
+#include "header/accel.hh"
 double velox = 0;
 double veloy = 0;
 double veloz = 0;
@@ -51,7 +52,17 @@ void competition_initialize() {
 }
 
 void autonomous() { 
-	turn_left_to_look_at(90);
+	pros::Task get_position_task(get_position);	
+	
+	while (true) {
+		master.set_text(0, 0, std::to_string(position[1]));
+		left_motors.move(70);
+		right_motors.move(70);
+	}
+	turn_left_to_look_at(-90);
+	turn_left_to_look_at_TEST(-180);
+
+	
 	// Auton near (right) side
 	// left_motors.move(-78);
 	// right_motors.move(-120);
