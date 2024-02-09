@@ -14,4 +14,5 @@ void move_forward(double distance_cm, double lowest_speed, double fastest_speed)
 void move_forward_inertial(double distance_cm, double lowest_base_speed, double fastest_base_speed, double base_speed);
 void move_forward_inertial_pid(double distance_cm, double lowest_base_speed, double fastest_base_speed);
 void move_backward_inertial_pid(double distance_cm, double lowest_base_speed, double fastest_base_speed);
+void move_forward_inertial_accel(double distance_cm, double lowest_base_speed, double fastest_base_speed, double base_speed);
 #endif

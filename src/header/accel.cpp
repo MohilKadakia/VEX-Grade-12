@@ -2,8 +2,8 @@
 #include <iostream>
 
 double acceleration[2];
-extern double velocity[2];
-extern double position[2];
+double velocity[2];
+double position[2];
 double previous_time;
 
 void get_acceleration() {

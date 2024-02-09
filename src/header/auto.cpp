@@ -4,6 +4,7 @@
 #include <bits/stdc++.h>
 #include <iostream>
 #include <cmath>
+#include "accel.hh"
 
 using namespace std;
 
@@ -44,11 +45,11 @@ double get_distance_in_degrees(double distance_cm) {
 }
 
 void turn_right_to_look_at(double degrees) {
-    double average_inertial_degree = IMU.get_pitch();
+    double average_inertial_degree = IMU.get_yaw();
     master.clear();
     while (fabs(degrees - average_inertial_degree) > 1) {
-        average_inertial_degree = IMU.get_pitch();
-        pros::lcd::set_text(0, std::to_string(IMU.get_pitch()));
+        average_inertial_degree = IMU.get_yaw();
+        pros::lcd::set_text(0, std::to_string(IMU.get_yaw()));
         pros::lcd::set_text(1, "Turning");
         double output = pid(degrees - average_inertial_degree, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
 
@@ -62,11 +63,11 @@ void turn_right_to_look_at(double degrees) {
 }
 
 void turn_right_to_look_at_TEST(double degrees) {
-    double average_inertial_degree = IMU.get_pitch();
+    double average_inertial_degree = IMU.get_yaw();
     master.clear();
 
     while (std::abs(degrees - average_inertial_degree) > 1.0) {
-        average_inertial_degree = IMU.get_pitch();
+        average_inertial_degree = IMU.get_yaw();
 
         double angle_difference = degrees - average_inertial_degree;
 
@@ -92,13 +93,13 @@ void turn_right_to_look_at_TEST(double degrees) {
 }
 
 void turn_left_to_look_at(double degrees) {
-    double average_inertial_degree = IMU.get_pitch();
+    double average_inertial_degree = IMU.get_yaw();
     double left_motor_velocity = 0;
     double right_motor_velocity = 0;
     master.clear();
     while (fabs(degrees - average_inertial_degree) > 1) {
-        average_inertial_degree = IMU.get_pitch();
-        pros::lcd::set_text(0, std::to_string(IMU.get_pitch()));
+        average_inertial_degree = IMU.get_yaw();
+        pros::lcd::set_text(0, std::to_string(IMU.get_yaw()));
         pros::lcd::set_text(1, "Turning");
         double output = pid(degrees - average_inertial_degree, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
 
@@ -108,15 +109,15 @@ void turn_left_to_look_at(double degrees) {
     }
     left_motors.move_velocity(0);
 	right_motors.move_velocity(0);
-    pros::lcd::set_text(1, "Completed Turn");
+    pros::lcd::set_text(1, "Completed Turn for stupid left turn test");
 }
 
 void turn_left_to_look_at_TEST(double degrees) {
-    double average_inertial_degree = IMU.get_pitch();
+    double average_inertial_degree = IMU.get_yaw();
     master.clear();
 
     while (std::abs(degrees - average_inertial_degree) > 1.0) {
-        average_inertial_degree = IMU.get_pitch();
+        average_inertial_degree = IMU.get_yaw();
 
         double angle_difference = degrees - average_inertial_degree;
 
@@ -139,7 +140,7 @@ void turn_left_to_look_at_TEST(double degrees) {
 
     left_motors.move_velocity(0);
     right_motors.move_velocity(0);
-    pros::lcd::set_text(1, "Completed Turn");
+    pros::lcd::set_text(1, "Completed Turn for 180 deg test");
 }
 
 void move_backward(double distance_cm, double lowest_speed, double fastest_speed) { 
@@ -189,7 +190,7 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
     double distance_degrees = get_distance_in_degrees(distance_cm);
 
     // calculates base angle
-    double average_inertial_start_angle = IMU.get_pitch();
+    double average_inertial_start_angle = IMU.get_yaw();
 
     // the start and current position is the same
     double avg_start_rotation = get_avg_motor_position();
@@ -198,7 +199,7 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
     while(avg_current_rotation <= avg_start_rotation + distance_degrees) {
         avg_current_rotation =  get_avg_motor_position();
 
-        double current_inertial_angle = IMU.get_pitch(); 
+        double current_inertial_angle = IMU.get_yaw(); 
         double error = average_inertial_start_angle - current_inertial_angle;
         double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 
@@ -214,7 +215,7 @@ void move_forward_inertial_pid(double distance_cm, double lowest_base_speed, dou
     double distance_degrees = get_distance_in_degrees(distance_cm);
 
     // calculates base angle
-    double average_inertial_start_angle = IMU.get_pitch();
+    double average_inertial_start_angle = IMU.get_yaw();
 
     // the start and current position is the same
     double avg_start_rotation = get_avg_motor_position();
@@ -223,7 +224,7 @@ void move_forward_inertial_pid(double distance_cm, double lowest_base_speed, dou
     while(avg_current_rotation <= avg_start_rotation + distance_degrees) {
         avg_current_rotation =  get_avg_motor_position();
 
-        double current_inertial_angle = IMU.get_pitch(); 
+        double current_inertial_angle = IMU.get_yaw(); 
         double inertial_error = average_inertial_start_angle - current_inertial_angle;
         double inertial_speed_output = pid(inertial_error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 
@@ -242,7 +243,7 @@ void move_backward_inertial_pid(double distance_cm, double lowest_base_speed, do
     double distance_degrees = get_distance_in_degrees(distance_cm);
 
     // calculates base angle
-    double average_inertial_start_angle = IMU.get_pitch();
+    double average_inertial_start_angle = IMU.get_yaw();
 
     // the start and current position is the same
     double avg_start_rotation = get_avg_motor_position();
@@ -251,7 +252,7 @@ void move_backward_inertial_pid(double distance_cm, double lowest_base_speed, do
     while(avg_current_rotation > avg_start_rotation - distance_degrees) {
         avg_current_rotation =  get_avg_motor_position();
 
-        double current_inertial_angle = IMU.get_pitch(); 
+        double current_inertial_angle = IMU.get_yaw(); 
         double inertial_error = average_inertial_start_angle - current_inertial_angle;
         double inertial_speed_output = pid(inertial_error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
 
@@ -260,6 +261,31 @@ void move_backward_inertial_pid(double distance_cm, double lowest_base_speed, do
 
         left_motors.move(std::clamp(distance_speed_output - inertial_speed_output, lowest_base_speed, fastest_base_speed));
         right_motors.move(std::clamp(distance_speed_output + inertial_speed_output, lowest_base_speed, fastest_base_speed));
+    }
+    left_motors.move(0);
+    right_motors.move(0);
+}
+
+void move_forward_inertial_accel(double distance_cm, double lowest_base_speed, double fastest_base_speed, double base_speed) {
+    // converts cm to degrees to be compared with motor positions (in degrees) 
+    double distance_meters = distance_cm / 100;
+
+    // calculates base angle
+    double average_inertial_start_angle = IMU.get_yaw();
+
+    // the start and current position is the same
+    double avg_start_position = position[1];
+    double avg_current_position = avg_start_position;
+
+    while(avg_current_position <= avg_start_position + distance_meters) {
+        avg_current_position = position[1];
+
+        double current_inertial_angle = IMU.get_yaw(); 
+        double error = average_inertial_start_angle - current_inertial_angle;
+        double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
+
+        left_motors.move(std::clamp(base_speed + output, lowest_base_speed, fastest_base_speed));
+        right_motors.move(std::clamp(base_speed - output, lowest_base_speed, fastest_base_speed));
     }
     left_motors.move(0);
     right_motors.move(0);
