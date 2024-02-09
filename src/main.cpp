@@ -59,8 +59,8 @@ void autonomous() {
 	// 	left_motors.move(70);
 	// 	right_motors.move(70);
 	// }
-	turn_left_to_look_at(-90);
-	turn_left_to_look_at_TEST(-180);
+	// turn_left_to_look_at(-90);
+	turn_left_to_look_at_TEST(-270);
 
 	
 	// Auton near (right) side

@@ -110,25 +110,19 @@ void turn_left_to_look_at(double degrees) {
     left_motors.move_velocity(0);
 	right_motors.move_velocity(0);
     pros::lcd::set_text(1, "Completed Turn for stupid left turn test");
+    // pros:delay(10);
 }
 
 void turn_left_to_look_at_TEST(double degrees) {
-    double average_inertial_degree = IMU.get_yaw();
+    double inertial_degree = IMU.get_yaw() < 0 ? IMU.get_yaw()+360 : IMU.get_yaw();
     master.clear();
 
-    while (std::abs(degrees - average_inertial_degree) > 1.0) {
-        average_inertial_degree = IMU.get_yaw();
+    while (std::abs(degrees - inertial_degree) > 1.0) {
+        double inertial_degree = IMU.get_yaw() < 0 ? IMU.get_yaw()+360 : IMU.get_yaw();
+        double angle_difference = degrees - inertial_degree;
 
-        double angle_difference = degrees - average_inertial_degree;
 
-        // Adjust for angle wrap-around near 180 degrees
-        if (angle_difference > 180.0) {
-            angle_difference -= 360.0;
-        } else if (angle_difference < -180.0) {
-            angle_difference += 360.0;
-        }
-
-        pros::lcd::set_text(0, std::to_string(average_inertial_degree));
+        pros::lcd::set_text(0, std::to_string(inertial_degree));
         pros::lcd::set_text(1, "Turning");
         double output = pid(angle_difference, &previous_error_turn, &integral_turn, 2.0, 0.1, 0.05);
 
