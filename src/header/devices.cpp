@@ -20,7 +20,7 @@ pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
 
 // Kicker Motor
-pros::Motor kicker_motor_1(PORT7, pros::E_MOTOR_GEAR_RED, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor kicker_motor_1(PORT9, pros::E_MOTOR_GEAR_RED, true, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor_Group kicker_motors({kicker_motor_1});
 
 // Intake Motor
@@ -28,10 +28,10 @@ pros::Motor intake_motor_1(PORT8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_
 pros::Motor_Group intake_motors({intake_motor_1});
 
 // Sensors
-pros::IMU IMU[] = {PORT9};
-pros::Optical optical_sensor(PORT10);
-pros::ADIUltrasonic ultrasonic(PORT11, PORT12);
+pros::IMU IMU[] = {PORT7};
+// pros::Optical optical_sensor(PORT10);
+pros::ADIUltrasonic ultrasonic(PORTC, PORTD); // plug output into port C and input into port D
 
 // Pneumatics
-pros::ADIDigitalOut hang(PORTF);
-pros::ADIDigitalOut wings(PORTG);
+pros::ADIDigitalOut hang(PORTH);
+pros::ADIDigitalOut wings(PORTB);

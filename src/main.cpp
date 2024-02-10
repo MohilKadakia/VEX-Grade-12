@@ -52,6 +52,10 @@ void competition_initialize() {
 }
 
 void autonomous() { 
+	while (true) {
+		master.set_text(0, 0, std::to_string(ultrasonic.get_value())); // possibly returning it in mm
+		pros::delay(900);
+	}
 	// pros::Task get_position_task(get_position);	
 	
 	// while (true) {
@@ -60,7 +64,6 @@ void autonomous() {
 	// 	right_motors.move(70);
 	// }
 	// turn_left_to_look_at(-90);
-	turn_left_to_look_at_TEST(-270);
 
 	
 	// Auton near (right) side
@@ -105,12 +108,13 @@ void autonomous() {
 }
 
 void opcontrol() {
+	pros::lcd::initialize();
 	pros::Task drive_task(drive_robot);
 	pros::Task kicker_task(kicker_trigger);
 	while (true) {
+		handle_intake();
 		handle_kicker();
 		handle_wings();
-		handle_intake();
 		handle_hang();
 		pros::delay(10);
 	}        
