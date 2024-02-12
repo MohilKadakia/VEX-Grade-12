@@ -17,25 +17,25 @@ void hang_trigger() {
 }
 
 void handle_hang() {
-    // if (hang_active) {
-    //     pros::lcd::set_text(1, "Should activate hang");
-    //     hang.set_value(1);
-    // }
-
-    // else {
-    //     pros::lcd::set_text(1, "Should de-activate hang");
-
-    //     hang.set_value(0);
-    // }
-    while (master.get_digital(master_UP)) {
-        master.set_text(0, 0, "Hang should be deploying");
-        hang.set_value(1);
-        pros::delay(100);
+    if (hang_active) {
+        pros::lcd::set_text(1, "Should activate hang");
+        hang.set_value(0);
     }
 
-    if (!(master.get_digital(master_UP))) {
-        master.set_text(0, 0, "Hang should be closing");
-        hang.set_value(0);
-        pros::delay(100);
-    }    
+    else {
+        pros::lcd::set_text(1, "Should de-activate hang");
+
+        hang.set_value(1);
+    }
+    // if (master.get_digital(master_UP)) {
+    //     master.set_text(0, 0, "Hang should be deploying");
+    //     hang.set_value(1);
+    //     pros::delay(100);
+    // }
+
+    // if (!(master.get_digital(master_UP))) {
+    //     master.set_text(0, 0, "Hang should be closing");
+    //     hang.set_value(0);
+    //     pros::delay(100);
+    // }    
 }

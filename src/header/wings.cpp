@@ -18,13 +18,13 @@ void wings_trigger() {
 
 void handle_wings() {
     while ((master.get_digital(master_L2)) || (master.get_digital(master_R2))) {
-        master.set_text(0, 0, "Wings should be deploying");
+        // master.set_text(0, 0, "Wings should be deploying");
         wings.set_value(1);
         pros::delay(100);
     }
 
     if (!(master.get_digital(master_R2) && master.get_digital(master_L2))) {
-        master.set_text(0, 0, "Wings should be closing");
+        // master.set_text(0, 0, "Wings should be closing");
         wings.set_value(0);
         pros::delay(100);
     }

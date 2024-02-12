@@ -8,7 +8,7 @@ double previous_time;
 
 void get_acceleration() {
     pros::c::imu_accel_s_t accel = IMU.get_accel();
-    pros::lcd::set_text(0, std::to_string(accel.z));
+    pros::lcd::set_text(0, std::to_string(accel.x));
 }
 
 void reset_position() {

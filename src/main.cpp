@@ -24,8 +24,8 @@ double pt = pros::millis();
 
 void initialize()
 {
-	IMU.reset(true);
-	pros::lcd::initialize();
+	// IMU.reset(true);
+	// pros::lcd::initialize();
 }
 
 void hold(double holdValue, double holdTime, int delay){
@@ -51,32 +51,94 @@ void competition_initialize() {
 	//reset_inertial();
 }
 
-void autonomous() { 
-	while (true) {
-		master.set_text(0, 0, std::to_string(ultrasonic.get_value())); // possibly returning it in mm
-		pros::delay(900);
-	}
-	// pros::Task get_position_task(get_position);	
-	
-	// while (true) {
-	// 	master.set_text(0, 0, std::to_string(position[1]));
-	// 	left_motors.move(70);
-	// 	right_motors.move(70);
-	// }
-	// turn_left_to_look_at(-90);
+void autonomous() {
 
+	// Far Side Auton 
+	// intake_motors.move(-100);
+	// left_motors.move(-110);
+	// right_motors.move(-75);
+	// pros::delay(1500);
+	// intake_motors.move(0);
+	// left_motors.move(0);
+	// right_motors.move(0);
+	// IMU.set_yaw(0);
+	// pros::delay(500);
+	// right_motors.move(80);
+	// left_motors.move(127);
+	// pros::delay(400);
+	// right_motors.move(0);
+	// left_motors.move(0);
+	// turn_right_to_look_at(120);
+	// intake_motors.move(127);
+	// move_forward_inertial(80.0, 70.0, 100.0, 90.0);
+	// turn_right_to_look_at(179);
+	// right_motors.move(100);
+	// left_motors.move(100);
+	// pros::delay(500);
+	// right_motors.move(0);
+	// left_motors.move(0);
+	
+
+	// // Far Side Auton 
+	// intake_motors.move(-100);
+	// left_motors.move(-110);
+	// right_motors.move(-75);
+	// pros::delay(1500);
+	// intake_motors.move(0);
+	// left_motors.move(0);
+	// right_motors.move(0);
+	// IMU.set_yaw(0);
+	// pros::delay(500);
+	// right_motors.move(80);
+	// left_motors.move(127);
+	// pros::delay(800);
+	// right_motors.move(0);
+	// left_motors.move(0);
+	// turn_right_to_look_at(79);
+	// left_motors.set_zero_position(0);
+	// right_motors.set_zero_position(0);
+	// move_forward_inertial(80.0, 70.0, 100.0, 90.0);
+
+	// Auton Skills
+	intake_motors.move(50);
+	kicker_motors.move(-87);
+	pros::delay(25000);
+	kicker_motors.move(0);
+	intake_motors.move(0);
+	move_forward_inertial(50.0, 20.0, 50.0, 40.0);
+	turn_left_to_look_at(-20);
+	left_motors.move(-110);
+	right_motors.move(-90);
+	pros::delay(2000);
+	left_motors.move(0);
+	right_motors.move(0);
+	master.set_text(0,0, "should reset inertial");
+	IMU.set_yaw(0);
+	master.set_text(0,0, "reseted inertial");
+	move_forward_inertial(10.0, 10.0, 30.0, 20.0);
+	turn_right_to_look_at(90);
+	move_forward_inertial(250.0, 50.0, 110.0, 90.0);
+	turn_left_to_look_at(0);
+	move_forward_inertial(80.0, 50.0, 110.0, 90.0);
+	wings.set_value(1);
 	
 	// Auton near (right) side
+	// intake_motors.move(-100);
 	// left_motors.move(-78);
 	// right_motors.move(-120);
 	// pros::delay(766);
+	// intake_motors.move(0);
 	// left_motors.move(0);
 	// right_motors.move(0);
-
+	// IMU.set_yaw(0);
 	// pros::delay(100);
-	// left_motors.move(45);
+	// left_motors.move(60);
 	// right_motors.move(120);
-	// pros::delay(400);
+	// pros::delay(800);
+	// left_motors.move(0);
+	// right_motors.move(0);
+	// turn_left_to_look_at(-90);
+
 	// wings.set_value(1);
 	// pros::delay(500);
 	// wings.set_value(0);
@@ -108,9 +170,10 @@ void autonomous() {
 }
 
 void opcontrol() {
-	pros::lcd::initialize();
+	hang.set_value(1);
 	pros::Task drive_task(drive_robot);
 	pros::Task kicker_task(kicker_trigger);
+	pros::Task hanger_task(hang_trigger);
 	while (true) {
 		handle_intake();
 		handle_kicker();

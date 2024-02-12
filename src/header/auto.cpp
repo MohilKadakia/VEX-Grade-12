@@ -24,6 +24,20 @@ double get_avg_motor_position() {
     double avg_motor_rotation_left = 0;
     double avg_motor_rotation_right = 0;
 
+    // avg_motor_rotation_left = left_motor_1.get_position();
+    // master.set_text(1, 0, std::to_string(avg_motor_rotation_left));
+
+    // master.set_text(2, 0, std::to_string(left_motor_2.get_position()));
+
+    // master.set_text(3, 0, std::to_string(left_motor_3.get_position()));
+
+    // master.set_text(0, 0, std::to_string(right_motor_1.get_position()));
+
+    // master.set_text(1, 0, std::to_string(right_motor_2.get_position()));
+
+    // master.set_text(2, 0, std::to_string(right_motor_3.get_position()));
+
+
     for(int i = 0; i < 3; i++) {
         avg_motor_rotation_left += left_motors.get_positions()[i];
         avg_motor_rotation_right += right_motors.get_positions()[i];
@@ -31,9 +45,9 @@ double get_avg_motor_position() {
 
     avg_motor_rotation_left /= 3;
     avg_motor_rotation_right /= 3;
-
+    
     double avg_rotation = (avg_motor_rotation_left + avg_motor_rotation_right) / 2;
-
+    master.set_text(0, 0, std::to_string(avg_rotation));
     return avg_rotation;
 }
 
@@ -189,10 +203,11 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
     // the start and current position is the same
     double avg_start_rotation = get_avg_motor_position();
     double avg_current_rotation = avg_start_rotation;
-
+    // master.set_text(0, 0, std::to_string(avg_current_rotation));
+    pros::delay(2000);
     while(avg_current_rotation <= avg_start_rotation + distance_degrees) {
         avg_current_rotation =  get_avg_motor_position();
-
+        master.set_text(0, 0, std::to_string(avg_current_rotation));
         double current_inertial_angle = IMU.get_yaw(); 
         double error = average_inertial_start_angle - current_inertial_angle;
         double output = pid(error, &previous_error_turn, &integral_turn, 7, 0, 0.05);
@@ -202,6 +217,8 @@ void move_forward_inertial(double distance_cm, double lowest_base_speed, double 
     }
     left_motors.move(0);
     right_motors.move(0);
+    left_motors.brake();
+    right_motors.brake();
 }
 
 void move_forward_inertial_pid(double distance_cm, double lowest_base_speed, double fastest_base_speed) {
@@ -230,6 +247,8 @@ void move_forward_inertial_pid(double distance_cm, double lowest_base_speed, dou
     }
     left_motors.move(0);
     right_motors.move(0);
+    left_motors.brake();
+    right_motors.brake();
 }
 
 void move_backward_inertial_pid(double distance_cm, double lowest_base_speed, double fastest_base_speed) {
