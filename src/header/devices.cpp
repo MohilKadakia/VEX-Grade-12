@@ -29,7 +29,6 @@ pros::Motor_Group intake_motors({intake_motor_1});
 
 // Sensors
 pros::IMU IMU[] = {PORT7};
-// pros::Optical optical_sensor(PORT10);
 pros::ADIUltrasonic ultrasonic(PORTC, PORTD); // plug output into port C and input into port D
 
 // Pneumatics

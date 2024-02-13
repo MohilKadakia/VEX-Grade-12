@@ -17,7 +17,6 @@ void kicker_trigger() {
 		if (master.get_digital(master_B))
 		{
 			kicker_active = !kicker_active;
-			// hold_active = false;
 			while(master.get_digital(master_B)) {
 				pros::delay(10);
 			}

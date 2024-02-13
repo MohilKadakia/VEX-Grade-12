@@ -12,8 +12,8 @@ void hang_trigger() {
                 pros::delay(10);
             }
         }
+        pros::delay(10);
     }
-    pros::delay(10);
 }
 
 void handle_hang() {
@@ -27,15 +27,4 @@ void handle_hang() {
 
         hang.set_value(1);
     }
-    // if (master.get_digital(master_UP)) {
-    //     master.set_text(0, 0, "Hang should be deploying");
-    //     hang.set_value(1);
-    //     pros::delay(100);
-    // }
-
-    // if (!(master.get_digital(master_UP))) {
-    //     master.set_text(0, 0, "Hang should be closing");
-    //     hang.set_value(0);
-    //     pros::delay(100);
-    // }    
 }

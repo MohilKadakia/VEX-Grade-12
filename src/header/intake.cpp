@@ -4,7 +4,7 @@
 
 
 void intake() {
-    // while(true) {
+    while(true) {
 		bool intake_forward = master.get_digital(master_R2);
 		bool intake_backward = master.get_digital(master_L2);
 
@@ -20,9 +20,8 @@ void intake() {
         else {
             intake_motor.brake();
         }
-        // pros::delay(10);
-
-    // }
+        pros::delay(10);
+    }
 }
 void handle_intake() {
     while (master.get_digital(master_L1)) {

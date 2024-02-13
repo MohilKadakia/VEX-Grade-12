@@ -4,7 +4,6 @@
 #include <bits/stdc++.h>
 #include <iostream>
 #include <cmath>
-#include "accel.hh"
 
 using namespace std;
 
