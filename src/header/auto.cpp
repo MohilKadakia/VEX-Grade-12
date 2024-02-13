@@ -23,8 +23,18 @@ void move(double meters, double encode_unit_to_meter, double kP, double kI, doub
     }
 }
 
-void move_radius() {
-
+void move_radius(double radius, double width, double voltage, bool left = false) {
+    left_motors.set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
+    right_motors.set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
+    double value = 2*voltage*cos*atan2(width*tan(acos(0.5)), radius)-voltage;
+    if (left){
+        left_motors.move(value);
+        right_motors.move(voltage);
+    }
+    else {
+        left_motors.move(voltage);
+        right_motors.move(value);
+    }
 }
 
 void turn(double degrees, double kP, double kI, double kD) {
