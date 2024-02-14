@@ -20,12 +20,10 @@ pros::Motor_Group left_motors({left_motor_1, left_motor_2, left_motor_3});
 pros::Motor_Group right_motors({right_motor_1, right_motor_2, right_motor_3});
 
 // Kicker Motor
-pros::Motor kicker_motor_1(PORT9, pros::E_MOTOR_GEAR_RED, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor_Group kicker_motors({kicker_motor_1});
+pros::Motor kicker_motor(PORT9, pros::E_MOTOR_GEAR_RED, true, pros::E_MOTOR_ENCODER_DEGREES);
 
 // Intake Motor
-pros::Motor intake_motor_1(PORT8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor_Group intake_motors({intake_motor_1});
+pros::Motor intake_motor(PORT8, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 // Sensors
 pros::IMU IMU(PORT7);

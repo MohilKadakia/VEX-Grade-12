@@ -28,9 +28,9 @@ void kicker_trigger() {
 
 void handle_kicker() {
 	if (kicker_active)
-		kicker_motors.move(-87);
+		kicker_motor.move(-87);
 
 	if(!kicker_active) {
-		kicker_motors.move(0);
+		kicker_motor.move(0);
 	}
 }
