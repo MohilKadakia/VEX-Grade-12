@@ -11,7 +11,7 @@ pros::Motor left_motor_2(PORT5, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENC
 pros::Motor left_motor_3(PORT6, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
 
 // Right Motors
-pros::Motor right_motor_1(PORT11, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor right_motor_1(PORT18, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_motor_2(PORT2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_motor_3(PORT3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);
 

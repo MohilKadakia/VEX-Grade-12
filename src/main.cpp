@@ -13,7 +13,7 @@
 void initialize()
 {
 	// IMU.reset(true);
-	// pros::lcd::initialize();
+	pros::lcd::initialize();
 }
 
 void disabled() 
@@ -29,16 +29,16 @@ void autonomous() {
 }
 
 void opcontrol() {
-	hang.set_value(1);
-	pros::Task kicker_task(kicker_trigger);
-	pros::Task hanger_task(hang_trigger);
+	// hang.set_value(1);
+	// pros::Task kicker_task(kicker_trigger);
+	// pros::Task hanger_task(hang_trigger);
 	pros::Task driver_options_task(driver_options);
 	while (true) {
 		drive_robot();
 		handle_intake();
-		handle_kicker();
-		handle_wings();
-		handle_hang();
+		// handle_kicker();
+		// handle_wings();
+		// handle_hang();
 		pros::delay(16);
 	}        
 }
