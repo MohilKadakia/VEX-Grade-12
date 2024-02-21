@@ -7,7 +7,9 @@ double pid_distance_integral;
 double pid_turn_previous_error;
 double pid_turn_integral;
 
-void move(double meters, double encode_unit_to_meter, double kP, double kI, double kD, double kPturn, double kIturn, double kDturn) {
+double encode_unit_to_meter = 2400;
+
+void move(double meters, double kP, double kI, double kD, double kPturn, double kIturn, double kDturn) {
     double travelled = 0;
     double start_angle = IMU.get_yaw();
     double turned = 0;
