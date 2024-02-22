@@ -7,18 +7,19 @@ double fixInputX(double inputX, double inputY){
 }
 double fixInputY(double inputX, double inputY){
 	double t = atan2(inputY, inputX);
-	return sin(t)*((signbit(inputX*inputY)*2)-1);
+	return sin(t)*((signbit(inputY)*2)-1);
 }
 int reversed = -1;
 double speed = 1;
 void drive_robot() {
 	int left_y = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-	int right_x = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X); 
+	int right_x = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+	
 	pros::lcd::set_text(0, std::to_string(fixInputY(right_x, left_y)*left_y) + ' ' + std::to_string(fixInputX(right_x, left_y)*right_x));
-	int left_motor_velocity = fixInputY(right_x, left_y)*left_y + (fixInputX(right_x, left_y)*right_x*reversed*-1);
-	int right_motor_velocity = fixInputY(right_x, left_y)*left_y - (fixInputX(right_x, left_y)*right_x*reversed*-1);
+	int left_motor_velocity = (fixInputY(right_x, left_y)*left_y) + (fixInputX(right_x, left_y)*right_x);
+	int right_motor_velocity = (fixInputY(right_x, left_y)*left_y) - (fixInputX(right_x, left_y)*right_x);
 
-	left_motors.move(left_motor_velocity*reversed*speed);
+	left_motors.move(left_motor_velocity*reversed*speed*0.92);
 	right_motors.move(right_motor_velocity*reversed*speed);
 	
 }

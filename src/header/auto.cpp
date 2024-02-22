@@ -7,7 +7,7 @@ double pid_distance_integral;
 double pid_turn_previous_error;
 double pid_turn_integral;
 
-double encode_unit_to_meter = 2400;
+double encode_unit_to_meter = 1.4;
 
 void move(double meters, double kP, double kI, double kD, double kPturn, double kIturn, double kDturn) {
     double travelled = 0;
@@ -52,13 +52,17 @@ void turn(double degrees, double kP, double kI, double kD) {
     double start_angle = IMU.get_yaw();
     double turned = 0;
     double pid_turn_output = 0;
-    IMU.tare_yaw();
+    // IMU.tare_yaw();
     while (abs(turned) < abs(degrees)) {
-        turned += IMU.get_yaw()-turned;
-        IMU.tare_yaw();
+    pros::lcd::set_text(1, std::to_string(IMU.get_yaw()));
+    pros::lcd::set_text(2, std::to_string(turned));
+
+        turned = IMU.get_yaw();
+        // IMU.tare_yaw();
         pid_turn_output = pid(degrees-turned, &pid_turn_previous_error, &pid_turn_integral, kP, kI, kD);
-        left_motors.move(pid_turn_output);
-        right_motors.move(-pid_turn_output);
+        // left_motors.move(pid_turn_output);
+        // right_motors.move(-pid_turn_output);
+        pros::delay(10);
     }
 }
 

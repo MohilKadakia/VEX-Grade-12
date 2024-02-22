@@ -12,7 +12,7 @@
 
 void initialize()
 {
-	// IMU.reset(true);
+	IMU.reset(true);
 	pros::lcd::initialize();
 }
 
@@ -25,11 +25,13 @@ void competition_initialize() {
 }
 
 void autonomous() {
-	// move(10, 2, 0.1, 0.05, 7, 0, 0.05);
+	turn(190, 1, 0.1, 0.1);
 }
 
 void opcontrol() {
 	hang.set_value(1);
+	left_motors.set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
+	right_motors.set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
 	pros::Task kicker_task(kicker_trigger);
 	pros::Task hanger_task(hang_trigger);
 	pros::Task wings_task(wings_trigger);
