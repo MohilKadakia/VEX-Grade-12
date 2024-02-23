@@ -34,3 +34,13 @@ void handle_kicker() {
 		kicker_motor.move(0);
 	}
 }
+void hold_kicker(int hold_value, int efficentcy_threshold){
+	if (master.get_digital(master_X)){
+		if (kicker_motor.get_efficiency() > efficentcy_threshold || kicker_motor.get_efficiency() <= 0){
+			kicker_motor.move(-100);
+		}
+		else{
+		kicker_motor.move(hold_value);
+		}
+	}
+}
